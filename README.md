@@ -29,15 +29,37 @@
      ├── PointCloud_ComplexHologram.py           # 点云数据——生成全息图并重建的代码
      ├── Reconstruction_layer.py                 # 层化重建代码
      ├── Reconstruction_mutiview.py              # 多视角重建代码           
-     └── Voxel_ComplexHologram.py                # 体素数据——生成全息图并重建的代码                    # 调整图像大小并裁减
+     └── Voxel_ComplexHologram.py                # 体素数据——生成全息图并重建的代码    
      
- ├── result                                          #存放结果的目录
-      ├── Layer\                                     #层化结果目录
-      ├── LightField\                                #光场结果目录
-      └── PointCloud\                                #点云结果目录
+ ├── result\                                     #存放重建结果的目录
+      ├── Layer\                                 #存放层化数据重建结果的目录
+      ├── LightField\                            #存放光场数据重建结果的目录
+      ├── Mesh\                                  #存放Mesh数据重建结果的目录
+      ├── NeRF\                                  #存放NeRF数据重建结果的目录
+      ├── PointCloud\                            #存放点云数据重建结果的目录
+      └── Voxel\                                 #存放体素数据重建结果的目录
 
+ └── README\
+      ├── Layer.md                               #层化数据README
+      ├── LightField.md\                         #光场数据README
+      ├── Mesh.md\                               #Mesh数据README
+      ├── NeRF.md\                               #NeRF数据README
+      ├── PointCloud.md\                         #点云数据README
+      └── Voxel.md\                              #体素数据README
 
 ```
+### 2.获取初始数据集
+初始数据集（BunnyDragon.obj）获取网址如下：
+
+通过网盘分享的文件：Review of CGH for 3D Heterogeneous Data
+
+链接: https://pan.baidu.com/s/1v8WpkBr7jnyo2QVmDijYJA?pwd=kam7 
+
+提取码: kam7
+
+将下载好的BunnyDragon.obj放入文件夹dataset中 
+
+### 3.配置环境
 
 
 
