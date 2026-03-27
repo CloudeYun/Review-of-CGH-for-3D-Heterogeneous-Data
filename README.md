@@ -1,55 +1,36 @@
-# Review
-test
-# 全息综述实验部分代码
+# The Code in Review of CGH for 3D Heterogeneous Data
 
-## 代码结构
+## 运行步骤
+
+### 1. 将该项目拷贝至你的本地运行环境中
+
+拷贝后，你的项目结构应如下所示
 
 ```python
-./CGHReview
-├── dataset/                                        # 生成各种格式数据的目录
-     ├── Layer/                                     # 存放层化数据的目录，包括LDI（多层）和RGBD
-           ├── BunnyDragonColor_double_LDI/         # 正反面LDI（一共10层的RGB和深度）
-           ├── BunnyDragonColor_single_LDI/         # 正面LDI（一共5层的RGB和深度）
-           └── BunnyDragonColor_RGBD/               # RGBD数据 
-     ├── LightField/                                # 存放光场数据的目录，包含正交光场和透视光场
-           ├── LF_orth_"n"x"n"_rgb_fix_"m"/         # 用n*n大小的视图进行拍摄得到分辨率为m的正交光场
-                ├── images                          # 存放图片的文件夹
-                ├── intrinsics.csv                  # 整体参数
-                └── mapping_matlab_order.csv        # 各视角参数
-           └──LF_pers_"n"x"n_rgb_fix_"m"_50_53mm_parallel/  #用n*n大小的视图进行拍摄得到分辨率为m的透视光场
-                ├── images                          # 存放图片的文件夹
-                ├── intrinsics.csv                  # 整体参数
-                ├── poses.csv                       # 各视角参数
-                └── time.csv                        # 时间参数
-     ├── Mesh/
-          └── BunnyDragonRGB.obj                    #初始obj文件
-     ├── PointCloud/
-          ├── PointCloud_30000\
-                 └── bunnydragonRGB_pointcloud_color_3e5   #30k个点的点云
-          ├── PointCloud_300000\
-                 └── bunnydragon_pointcloud_3e6_color      #300k个点的点云
-          ├── PointCloud_3000000\
-                 └── bunnydragonRGB_pointcloud_color_3e7   #3M个点的点云
-          ├── PointCloud_30000000\
-                 └── bunnydragonRGB_pointcloud_color_3e8   #30M个点的点云
-     ├── mesh2LDI.py                                 # obj生成层化数据代码
-     ├── mesh2LF_orth.py                             # obj生成正交光场数据代码
-     ├── mesh2LF_pers.py                             # obj透视正交光场数据代码
-     ├── mesh2pcd_color.py                           # obj生成点云数据代码                                 
-     └── StorageCount.py                             # 计算数据量大小
+./Review-of-CGH-for-3D-Heterogeneous-Data
+├── dataset/                                     # 生成六大类格式数据的目录及代码
+     ├── Layer/                                  # 存放层化数据的目录
+     ├── LightField/                             # 存放光场数据的目录           
+     ├── Mesh/                                   # 存放Mesh数据的目录
+     ├── PointCloud/                             # 存放PointCloud数据的目录
+     ├── Voxe/                                   # 存放体素数据的目录
+     ├── Obj2Layer.py                            # 生成层化数据的代码
+     ├── Obj2LF_orth.py                          # 生成正交光场的代码
+     ├── Obj2LF_pers.py                          # 生成透视光场的代码
+     ├── Obj2Mesh.py                             # 生成Mesh的代码
+     ├── Obj2PCD.py                              # 生成PointCloud的代码                                
+     └── Obj2Voxel.py                            # 生成体素的代码
     
- ├── model                                           # 生成全息图并重建的代码
-     ├── Layer_ASM_Gray_PhaseHologram.py             # 层化数据——生成单相位全息图并灰色重建的代码
-     ├── Layer_ASM_RGB_ComplexHologram.py            # 层化数据——生成复全息图并彩色重建的代码
-     ├── LightField_Orth_Gray_PhaseHologram.py       # 正交光场数据——生成单相位全息图并灰色重建的代码
-     ├── LightField_Orth_RGB_ComplexHologram.py      # 正交光场数据——生成复全息图并彩色重建的代码
-     ├── LightField_Pers_RGB_ComplexHologram.py      # 透视光场数据——生成复全息图并彩色重建的代码
-     ├── PointCloud_Gray_PhaseHologram.py            # 点云数据——生成单相位全息图并灰色重建的代码
-     ├── PointCloud_RGB_ComplexHologram.py           # 点云数据——生成复全息图并彩色重建的代码
-     ├── Reconstruction_Gray_ASM.py                  # 单相位全息图层化重建（统一的层化重建代码）
-     ├── Reconstruction_RGB_ASM.py                   # 复振幅全息图层化重建（统一的层化重建代码）
-     ├── Reconstruction_RGB_multiview.py             # 复振幅全息图多视重建（统一的多视重建代码）
-     └── utils.py                                    # 调整图像大小并裁减
+ ├── model                                       # 生成全息图并重建的代码
+     ├── Layer_ComplexHologram.py                # 层化数据——生成全息图并重建的代码
+     ├── LightField_Orth_ComplexHologram.py      # 正交光场——生成全息图并重建的代码
+     ├── LightField_Pers_ComplexHologram.py      # 透视光场——生成全息图并重建的代码
+     ├── Mesh_ComplexHologram.py                 # Mesh数据——生成全息图并重建的代码
+     ├── PointCloud_ComplexHologram.py           # 点云数据——生成全息图并重建的代码
+     ├── Reconstruction_layer.py                 # 层化重建代码
+     ├── Reconstruction_mutiview.py              # 多视角重建代码
+     ├── Reconstruction_RGB_ASM.py                
+     └── Voxel_ComplexHologram.py                                    # 调整图像大小并裁减
      
  ├── result                                          #存放结果的目录
       ├── Layer\                                     #层化结果目录
