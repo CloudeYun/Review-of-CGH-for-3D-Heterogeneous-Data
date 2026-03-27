@@ -1,6 +1,6 @@
 # The Code in Review of CGH for 3D Heterogeneous Data
 
-## 运行步骤
+## 代码配置步骤
 
 ### 1. 将该项目拷贝至你的本地运行环境中
 
@@ -39,13 +39,16 @@
       ├── PointCloud\                            #存放点云数据重建结果的目录
       └── Voxel\                                 #存放体素数据重建结果的目录
 
- └── README\
+ ├── README\
       ├── Layer.md                               #层化数据README
       ├── LightField.md\                         #光场数据README
       ├── Mesh.md\                               #Mesh数据README
       ├── NeRF.md\                               #NeRF数据README
       ├── PointCloud.md\                         #点云数据README
       └── Voxel.md\                              #体素数据README
+
+└── environment.yml                              #环境配置文件
+
 
 ```
 ### 2.获取初始数据集
@@ -61,11 +64,34 @@
 
 ### 3.配置环境
 
-
+采用environment.yml文件配置conda环境，执行
+``` bash
+conda env create -f environment.yml
+```
 
 ## 运行流程
 
-### 一、生成各种数据结构（这一步可以不做，我已经把所有数据都给你打包放进去了，这里是讲一下怎么生成的）
+### 1.层化数据
+
+生成层化数据代码：
+
+生成层化数据全息图代码：
+
+层重建代码：
+
+多视重建代码：
+
+详细指导内容：
+
+### 2.点云数据
+
+### 3.光场数据
+
+### 4.Mesh数据
+
+### 5.体素数据
+
+### 6.NeRF数据
 
 #### 1.层化数据
 
