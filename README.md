@@ -1,6 +1,6 @@
 # The Code in Review of CGH for 3D Heterogeneous Data
 
-## 代码配置步骤
+## 代码配置步骤 ✨
 
 ### 1. 将该项目拷贝至你的本地运行环境中
 
@@ -69,9 +69,9 @@
 conda env create -f environment.yml
 ```
 
-## 运行流程
+## 运行流程 ✨
 
-### 1.层化数据
+### 1.层化数据 🎯
 
 生成层化数据代码：
 
@@ -79,7 +79,7 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-### 2.点云数据
+### 2.点云数据 ❄️
 
 生成点云数据代码：
 
@@ -87,7 +87,7 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-### 3.光场数据
+### 3.光场数据 ⚡️
 
 生成光场数据代码：
 
@@ -95,7 +95,7 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-### 4.Mesh数据
+### 4.Mesh数据 ▶️
 
 生成Mesh数据代码：
 
@@ -103,7 +103,7 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-### 5.体素数据
+### 5.体素数据 ♦️
 
 生成体素数据代码：
 
@@ -111,7 +111,7 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-### 6.NeRF数据
+### 6.NeRF数据 🧠
 
 生成NeRF数据代码：
 
@@ -119,7 +119,7 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-### 7.重建
+### 7.重建 🪜
 
 层重建代码：
 
