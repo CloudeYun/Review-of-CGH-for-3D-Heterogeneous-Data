@@ -28,9 +28,8 @@
      ├── Mesh_ComplexHologram.py                 # Mesh数据——生成全息图并重建的代码
      ├── PointCloud_ComplexHologram.py           # 点云数据——生成全息图并重建的代码
      ├── Reconstruction_layer.py                 # 层化重建代码
-     ├── Reconstruction_mutiview.py              # 多视角重建代码
-     ├── Reconstruction_RGB_ASM.py                
-     └── Voxel_ComplexHologram.py                                    # 调整图像大小并裁减
+     ├── Reconstruction_mutiview.py              # 多视角重建代码           
+     └── Voxel_ComplexHologram.py                # 体素数据——生成全息图并重建的代码                    # 调整图像大小并裁减
      
  ├── result                                          #存放结果的目录
       ├── Layer\                                     #层化结果目录
