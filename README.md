@@ -173,10 +173,28 @@ conda env create -f environment.yml
 
 层重建结果：50mm --------------------> 53mm
 
+右转 0 degree
+
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_1.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_2.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_3.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d0_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d0_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d0_3.png" width="30%" alt="img3">
+</div>
+
+右转 3 degrees
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d3_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d3_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d3_3.png" width="30%" alt="img3">
+</div>
+
+右转 5 degrees
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d5_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d5_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_d5_3.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
