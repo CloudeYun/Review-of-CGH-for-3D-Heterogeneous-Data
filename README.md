@@ -82,15 +82,15 @@ conda env create -f environment.yml
 层重建结果：50mm --------------------> 53mm
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer_resize/layer_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer_resize/layer_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer_resize/layer_recon_3.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/Layer_multiview_recon.png" width="80%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer_resize/Layer_multiview_recon.png" width="80%" alt="img1">
 </div>
 
 ### 2.点云数据 ❄️
@@ -106,31 +106,31 @@ conda env create -f environment.yml
 300k采样率
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1_3e5.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2_3e5.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3_3e5.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_1_3e5.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_2_3e5.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_3_3e5.png" width="30%" alt="img3">
 </div>
 
 3M采样率
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1_3e6.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2_3e6.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3_3e6.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_1_3e6.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_2_3e6.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_3_3e6.png" width="30%" alt="img3">
 </div>
 
 30M采样率
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1_3e7.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2_3e7.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3_3e7.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_1_3e7.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_2_3e7.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_recon_3_3e7.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_multiview_recon.png" width="80%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_multiview_recon.png" width="80%" alt="img1">
 </div>
 
 ### 3.光场数据 ⚡️
@@ -148,17 +148,17 @@ conda env create -f environment.yml
 正交光场
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_orth_recon_1.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_orth_recon_2.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_orth_recon_3.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField_resize/LF_orth_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField_resize/LF_orth_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField_resize/LF_orth_recon_3.png" width="30%" alt="img3">
 </div>
 
 透视光场
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_pers_recon_1.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_pers_recon_2.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_pers_recon_3.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField_resize/LF_pers_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField_resize/LF_pers_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField_resize/LF_pers_recon_3.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
@@ -174,9 +174,9 @@ conda env create -f environment.yml
 层重建结果：50mm --------------------> 53mm
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh/Mesh_recon_1.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh/Mesh_recon_2.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh/Mesh_recon_3.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_3.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
@@ -192,15 +192,15 @@ conda env create -f environment.yml
 层重建结果：50mm --------------------> 53mm
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_recon_1.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_recon_2.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_recon_3.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel_resize/Voxel_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel_resize/Voxel_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel_resize/Voxel_recon_3.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_multiview_recon.png" width="80%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel_resize/Voxel_multiview_recon.png" width="80%" alt="img1">
 </div>
 
 ### 6.NeRF数据 🧠
