@@ -88,9 +88,9 @@ conda env create -f environment.yml
 </div>
 
 <div align="center">
-  <span style="display:inline-block; width:30%;">图1：50mm</span>
-  <span style="display:inline-block; width:30%;">图2：51mm</span>
-  <span style="display:inline-block; width:30%;">图3：52mm</span>
+  <span style="display:inline-block; width:30%; text-align:center;">图1：50mm</span>
+  <span style="display:inline-block; width:30%; text-align:center;">图2：51mm</span>
+  <span style="display:inline-block; width:30%; text-align:center;">图3：52mm</span>
 </div>
 
 
