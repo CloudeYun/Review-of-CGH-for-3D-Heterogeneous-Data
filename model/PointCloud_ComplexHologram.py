@@ -41,6 +41,26 @@ Example:
       --rot_pitch_deg 90 \
       --rotate_around_center \
       --depth_flip
+
+    python ./model/PointCloud_ComplexHologram.py \
+      --data_path /workspace/yh/project/CGHReview/dataset/PointCloud3/PointCloud_3000000/bunnydragonRGB_pointcloud_color_3e7.ply \
+      --out_root ./result/PointCloud/4bins_3e7\
+      --target_size 2048 \
+      --out_size 2048 \
+      --pixel_pitch 5e-6 \
+      --wavelength 532e-9 \
+      --z_min_mm 50.0 \
+      --z_max_mm 53.0 \
+      --num_bins 4 \
+      --fit_margin 0.90 \
+      --rng_seed 2024 \
+      --gamma 0.65 \
+      --vis_mode percentile \
+      --p_low 1.0 \
+      --p_high 99.0 \
+      --rot_pitch_deg 90 \
+      --rotate_around_center \
+      --depth_flip
 """
 
 import os

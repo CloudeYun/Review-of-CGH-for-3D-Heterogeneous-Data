@@ -103,10 +103,28 @@ conda env create -f environment.yml
 
 层重建结果：50mm --------------------> 53mm
 
+300k采样率
+
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1.png" width="30%" alt="img1">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2.png" width="30%" alt="img2">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3.png" width="30%" alt="img3">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1_3e5.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2_3e5.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3_3e5.png" width="30%" alt="img3">
+</div>
+
+3M采样率
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1_3e6.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2_3e6.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3_3e6.png" width="30%" alt="img3">
+</div>
+
+30M采样率
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1_3e7.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2_3e7.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3_3e7.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
@@ -200,6 +218,8 @@ conda env create -f environment.yml
 多视角重建代码：[Multiview Reconstruction] (https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Reconstruction_mutiview.py)
 
 详细指导内容: [Reconstruction_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/Reconstruction.md)
+
+------下面的内容待修改------
 
 #### 1.层化数据
 
@@ -596,4 +616,128 @@ python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
  --pha_g /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/pha_G.npy \
  --amp_b /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/amp_B.npy \
  --pha_b /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/pha_B.npy \
-  --outdir /workspace/y
+  --outdir /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Multiview_ReconFromHologram_0.9 \
+ --wavelength 532e-9 \
+ --pitch 4e-6 \
+ --zmin 0.05 --zmax 0.052 --step 0.0005 \
+ --gamma 0.9 \
+ --out_size 2048 \
+ --view_grid 9 \
+ --aperture_ratio 0.35 \
+ --max_shift_ratio 0.8 \
+ --save_mosaic
+```
+
+⚠️注意事项：
+
+1. 前面的路径要改成你自己的
+
+2. --outdir要定位到输入全息图的路径下，具体结构如下
+
+```python
+./CGHReview/result/Layer/RGBD_complexRGB_3bins_50_53mm(拿这个举例)
+    ├── Binned/      #不用管
+    ├── Hologram/    #存放全息图的目录
+         ├── amp_R(G/B).png(.npy)        #RGB三个通道的振幅全息图的npy与png格式文件，共6个
+         ├── pha_R(G/B).npy              #RGB三个通道的相位全息图的npy格式文件，共3个
+         ├── phase_R(G/B).png            #RGB三个通道的相位全息图的png格式文件，共3个
+         └── holo_R(G/B).npy             #RGB三通道的复全息图的npy格式文件，共3个
+    ├── Recon/                           #测试用的生成不同层的重建结果（下面会用统一代码生成重建结果）
+    ├── ASM_ReconFromHologram_0.9/       #层化重建的结果
+    └── Multiview_ReconFromHologram_0.9/ #这里的--outdir
+          ├── z+0.050000m                #不同距离下的多视重建结果，但我觉得结果差不多，可以看注意事项7
+          ├── z+0.050500m
+          ├── z_0.051000m
+          ...
+```
+
+3. --gamma还是调整亮度的，和之前一样
+
+4. --view_grid 视角数量，这里9代表9*9的视角（这个参数合适，可以不用调整了）
+5. --max_shift_ratio 视角最大偏移量 (这里0.8能明显看出多视角的偏移)
+
+6. 这个生成时间很长，代码是按照不同距离生成的多视图，但是我感觉不同距离的多视结果是差不多的,所以可以生成一个距离的多视图就能看结果。
+
+##### b.点云
+
+```bash
+ python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
+ --amp_r /workspace/yh/project/CGHReview/result/PointCloud/PCD_complexRGB_20bins_3e7_50_53mm/Hologram/amp_R.npy \
+ --pha_r /workspace/yh/project/CGHReview/result/PointCloud/PCD_complexRGB_20bins_3e7_50_53mm/Hologram/phase_R.npy \
+ --amp_g /workspace/yh/project/CGHReview/result/PointCloud/PCD_complexRGB_20bins_3e7_50_53mm/Hologram/amp_G.npy \
+ --pha_g /workspace/yh/project/CGHReview/result/PointCloud/PCD_complexRGB_20bins_3e7_50_53mm/Hologram/phase_G.npy \
+ --amp_b /workspace/yh/project/CGHReview/result/PointCloud/PCD_complexRGB_20bins_3e7_50_53mm/Hologram/amp_B.npy \
+ --pha_b /workspace/yh/project/CGHReview/result/PointCloud/PCD_complexRGB_20bins_3e7_50_53mm/Hologram/phase_B.npy \
+ --outdir /workspace/yh/project/CGHReview/result/PointCloud/PCD_complexRGB_20bins_3e7_50_53mm/Multiview_ReconFromHologram \
+ --wavelength 532e-9 \
+ --pitch 5e-6 \
+ --zmin 0.051 --zmax 0.052 --step 0.0005 \
+ --gamma 0.9 \
+ --out_size 2048 \
+ --view_grid 9 \
+ --aperture_ratio 0.35 \
+ --max_shift_ratio 0.8 \
+ --save_mosaic
+```
+
+##### c.光场
+
+###### I 正交光场
+
+```bash
+python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
+ --amp_r /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_R.npy \
+ --pha_r /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_R.npy \
+ --amp_g /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_G.npy \
+ --pha_g /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_G.npy \
+ --amp_b /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_B.npy \
+ --pha_b /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_B.npy \
+ --outdir /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Multiview_ReconFromHologram_0.9 \
+ --wavelength 532e-9 \
+ --pitch 2e-6 \
+ --zmin -0.052 --zmax -0.050 --step 0.0005 \
+ --gamma 0.9 \
+ --out_size 2048 \
+ --view_grid 9 \
+ --aperture_ratio 0.35 \
+ --max_shift_ratio 0.8 \
+ --save_mosaic
+```
+
+######  II 透视光场
+
+```bash
+python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
+ --amp_r /workspace/yh/project/CGHReview/result/LightField/pers_RGB_ComplexHologram_20_400/Hologram/hologram_amp_R.npy \
+ --pha_r /workspace/yh/project/CGHReview/result/LightField/pers_RGB_ComplexHologram_20_400/Hologram/hologram_phase_R.npy \
+ --amp_g /workspace/yh/project/CGHReview/result/LightField/pers_RGB_ComplexHologram_20_400/Hologram/hologram_amp_G.npy \
+ --pha_g /workspace/yh/project/CGHReview/result/LightField/pers_RGB_ComplexHologram_20_400/Hologram/hologram_phase_G.npy \
+ --amp_b /workspace/yh/project/CGHReview/result/LightField/pers_RGB_ComplexHologram_20_400/Hologram/hologram_amp_B.npy \
+ --pha_b /workspace/yh/project/CGHReview/result/LightField/pers_RGB_ComplexHologram_20_400/Hologram/hologram_phase_B.npy \
+ --outdir /workspace/yh/project/CGHReview/result/LightField/pers_RGB_ComplexHologram_20_400/Multiview_ReconFromHologram_0.9 \
+ --wavelength 532e-9 \
+ --pitch 2e-6 \
+ --zmin -0.051 --zmax -0.049 --step 0.0005 \
+ --gamma 0.9 \
+ --out_size 2048 \
+ --view_grid 9 \
+ --aperture_ratio 0.35 \
+ --max_shift_ratio 0.8 \
+ --save_mosaic
+```
+
+⚠️注意事项
+同样的，光场重建出来的结果偏小，整体图像占居空间小，需要裁剪放大处理，采用./CGHReview/model/utils.py
+
+```bash
+python /workspace/yh/project/CGHReview/model/utils.py \
+  --in_dir  /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Multiview_ReconFromHologram_0.9/z_-0.052000m \
+  --out_dir /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Multiview_ReconFromHologram_0.9/z_-0.052000m_crop \
+  --frac 0.15
+```
+
+--frac是裁剪区域大小，越大裁剪的边上越多，可以用0.1或者0.15，自行调整
+
+## ⚠️整体注意事项
+
+重建出来的结果需要挑选，比如50mm-53mm距离内，并不是所有数据的结果都是选择50mm、51mm、52mm、53mm处的重建结果，因为方法不同，并且同一种方法中的选择参数不同也会对结果有影响（代码原因（调整可能会出bug又要改半天），可能会出现53mm结果在前，50mm结果在后，要具体去看重建的结果），可以挑选（50mm:兔子清晰的图像，51mm:龙头清晰的图像, 52mm:龙尾清晰的图像,53mm再往后虚的图像）
