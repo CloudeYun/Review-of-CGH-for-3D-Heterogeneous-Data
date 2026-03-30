@@ -75,7 +75,7 @@ conda env create -f environment.yml
 
 生成层化数据代码：[Layer_data](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2Layer.py)
 
-生成层化数据全息图代码：[Layer_hologram](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Layer/Obj2LayerHologram.py)
+生成层化数据全息图代码：[Layer_hologram](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Layer_ComplexHologram.py)
 
 详细指导内容：[Layer_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/Layer.md)
 
