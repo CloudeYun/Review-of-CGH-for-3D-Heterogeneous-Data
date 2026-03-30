@@ -77,6 +77,23 @@ Example:
         --vis_mode percentile \
         --p_low 1.0 --p_high 99.0 \
         --out_size 2048
+
+        python ./model/Reconstruction_layer.py \
+        --amp_r /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_R.npy \
+        --pha_r /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_R.npy \
+        --amp_g /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_G.npy \
+        --pha_g /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_G.npy \
+        --amp_b /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_B.npy \
+        --pha_b /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_B.npy \
+        --outdir /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/ASM_ReconFromHologram_65 \
+        --mode asm \
+        --wavelength 532e-9 \
+        --pitch 2e-6 \
+        --z_list -0.054 \
+        --gamma 0.65 \
+        --vis_mode percentile \
+        --p_low 1.0 --p_high 99.0 \
+        --out_size 2048
     
     Mesh:
         python ./model/Reconstruction_layer.py \

@@ -79,15 +79,13 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-层重建结果：
+层重建结果：50mm --------------------> 53mm
 
 <div align="center">
   <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%" alt="img1">
   <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%" alt="img2">
   <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%" alt="img3">
 </div>
-
-50mm --------------------> 53mm
 
 多视重建结果
 
@@ -99,6 +97,16 @@ conda env create -f environment.yml
 
 详细指导内容：
 
+层重建结果：50mm --------------------> 53mm
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_recon_3.png" width="30%" alt="img3">
+</div>
+
+多视重建结果
+
 ### 3.光场数据 ⚡️
 
 生成光场数据代码：
@@ -106,6 +114,26 @@ conda env create -f environment.yml
 生成光场数据全息图代码：
 
 详细指导内容：
+
+层重建结果：50mm --------------------> 53mm
+
+正交光场
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_orth_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_orth_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_orth_recon_3.png" width="30%" alt="img3">
+</div>
+
+透视光场
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_pers_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_pers_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_pers_recon_3.png" width="30%" alt="img3">
+</div>
+
+多视重建结果
 
 ### 4.Mesh数据 ▶️
 
@@ -115,6 +143,16 @@ conda env create -f environment.yml
 
 详细指导内容：
 
+层重建结果：50mm --------------------> 53mm
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh/Mesh_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh/Mesh_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh/Mesh_recon_3.png" width="30%" alt="img3">
+</div>
+
+多视重建结果
+
 ### 5.体素数据 ♦️
 
 生成体素数据代码：
@@ -122,6 +160,16 @@ conda env create -f environment.yml
 生成体素数据全息图代码：
 
 详细指导内容：
+
+层重建结果：50mm --------------------> 53mm
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_recon_3.png" width="30%" alt="img3">
+</div>
+
+多视重建结果
 
 ### 6.NeRF数据 🧠
 

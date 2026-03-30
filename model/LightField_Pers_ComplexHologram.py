@@ -24,7 +24,7 @@ Pipeline:
 
 Example:
     python ./model/LightField_Pers_ComplexHologram.py \
-      --lf_root /workspace/yh/project/CGHReview/dataset/LightField3/LF_pers_40x40_rgb_fix_800_50_53mm_parallel_3 \
+      --lf_root ./dataset/LightField/LF_pers_40x40_800 \
       --output_dir ./result/LightField/pers_40_800 \
       --fov_deg 7 \
       --d0 -0.050 \
