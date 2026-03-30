@@ -90,7 +90,7 @@ conda env create -f environment.yml
 多视重建结果
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer_resize/Layer_multiview_recon.png" width="80%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/Layer_multiview_recon.png" width="80%" alt="img1">
 </div>
 
 ### 2.点云数据 ❄️
@@ -130,7 +130,7 @@ conda env create -f environment.yml
 多视重建结果
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud_resize/PCD_multiview_recon.png" width="80%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/PointCloud/PCD_multiview_recon.png" width="80%" alt="img1">
 </div>
 
 ### 3.光场数据 ⚡️
@@ -200,7 +200,7 @@ conda env create -f environment.yml
 多视重建结果
 
 <div align="center">
-  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel_resize/Voxel_multiview_recon.png" width="80%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Voxel/Voxel_multiview_recon.png" width="80%" alt="img1">
 </div>
 
 ### 6.NeRF数据 🧠
