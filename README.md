@@ -83,17 +83,17 @@ conda env create -f environment.yml
 
 <div style="display: flex; gap: 12px; justify-content: center;">
   <figure style="text-align: center;">
-    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png width="220">
+    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%">
     <figcaption>图1：50mm</figcaption>
   </figure>
 
   <figure style="text-align: center;">
-    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="220">
+    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%">
     <figcaption>图2：51mm</figcaption>
   </figure>
 
   <figure style="text-align: center;">
-    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="220">
+    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%">
     <figcaption>图3：52mm</figcaption>
   </figure>
 </div>
