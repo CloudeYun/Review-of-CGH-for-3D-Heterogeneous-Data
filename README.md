@@ -91,11 +91,11 @@ conda env create -f environment.yml
 
 ### 2.点云数据 ❄️
 
-生成点云数据代码：
+生成点云数据代码：[PointCloud_data](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2PointCloud.py)
 
-生成点云数据全息图代码：
+生成点云数据全息图代码：[PointCloud_hologram](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/PointCloud_ComplexHologram.py)   
 
-详细指导内容：
+详细指导内容：[PointCloud_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/PointCloud.md)  
 
 层重建结果：50mm --------------------> 53mm
 
@@ -109,11 +109,13 @@ conda env create -f environment.yml
 
 ### 3.光场数据 ⚡️
 
-生成光场数据代码：
+生成光场数据代码：[LightField_data_orth](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2LF_orth.py)
+[LightField_data_pers](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2LF_pers.py)        
 
-生成光场数据全息图代码：
+生成光场数据全息图代码：[LightField_hologram_orth](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/LightField_Orth_ComplexHologram.py)
+[LightField_hologram_pers](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/LightField_Pers_ComplexHologram.py)
 
-详细指导内容：
+详细指导内容：[LightField_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/LightField.md)
 
 层重建结果：50mm --------------------> 53mm
 
@@ -137,11 +139,11 @@ conda env create -f environment.yml
 
 ### 4.Mesh数据 ▶️
 
-生成Mesh数据代码：
+生成Mesh数据代码：[Mesh_data](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2Mesh.py)
 
-生成Mesh数据全息图代码：
+生成Mesh数据全息图代码：[Mesh_hologram](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Mesh_ComplexHologram.py)
 
-详细指导内容：
+详细指导内容：[Mesh_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/Mesh.md)
 
 层重建结果：50mm --------------------> 53mm
 
@@ -155,11 +157,11 @@ conda env create -f environment.yml
 
 ### 5.体素数据 ♦️
 
-生成体素数据代码：
+生成体素数据代码：[Voxel_data](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2Vox.py)
 
-生成体素数据全息图代码：
+生成体素数据全息图代码：[Voxel_hologram](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Voxel_ComplexHologram.py)
 
-详细指导内容：
+详细指导内容：[Voxel_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/Voxel.md)
 
 层重建结果：50mm --------------------> 53mm
 
