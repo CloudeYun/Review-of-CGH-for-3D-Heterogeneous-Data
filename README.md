@@ -78,7 +78,6 @@ conda env create -f environment.yml
 生成层化数据全息图代码：
 
 详细指导内容：
-![](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png)
 
 <div align="center">
   <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%" alt="img1">
