@@ -87,6 +87,13 @@ conda env create -f environment.yml
   <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%" alt="img3">
 </div>
 
+<div align="center">
+  <span style="display:inline-block; width:30%;">图1：50mm</span>
+  <span style="display:inline-block; width:30%;">图2：51mm</span>
+  <span style="display:inline-block; width:30%;">图3：52mm</span>
+</div>
+
+
 多视重建结果
 
 ### 2.点云数据 ❄️
