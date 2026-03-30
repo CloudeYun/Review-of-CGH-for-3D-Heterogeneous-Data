@@ -79,7 +79,7 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-| <img src="https://raw.githubusercontent.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/main/result/Layer/layer_recon_1.png" width="250"> | <img src="https://raw.githubusercontent.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/main/result/Layer/layer_recon_2.png" width="250"> | <img src="https://raw.githubusercontent.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/main/result/Layer/layer_recon_3.png" width="250"> |
+| <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%"> | <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%"> | <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%"> |
 |---|---|---|
 | (a) 50mm | (b)  51mm | (c) 52mm |
 
