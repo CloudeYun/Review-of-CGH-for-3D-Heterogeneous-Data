@@ -79,11 +79,26 @@ conda env create -f environment.yml
 
 详细指导内容：
 
-| <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%"> | <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%"> | <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%"> |
-|---|---|---|
-| (a) 50mm | (b)  51mm | (c) 52mm |
+层重建结果：
 
-**Fig. 1.** Reconstruction results of layered holograms at different depths.
+<div style="display: flex; gap: 12px; justify-content: center;">
+  <figure style="text-align: center;">
+    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png width="220">
+    <figcaption>图1：50mm</figcaption>
+  </figure>
+
+  <figure style="text-align: center;">
+    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="220">
+    <figcaption>图2：51mm</figcaption>
+  </figure>
+
+  <figure style="text-align: center;">
+    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="220">
+    <figcaption>图3：52mm</figcaption>
+  </figure>
+</div>
+
+多视重建结果
 
 ### 2.点云数据 ❄️
 
