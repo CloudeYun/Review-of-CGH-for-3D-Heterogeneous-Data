@@ -89,6 +89,10 @@ conda env create -f environment.yml
 
 多视重建结果
 
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_multiview_recon.png" width="100%" alt="img1">
+</div>
+
 ### 2.点云数据 ❄️
 
 生成点云数据代码：[PointCloud_data](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2PointCloud.py)

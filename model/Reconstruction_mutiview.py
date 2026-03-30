@@ -95,17 +95,17 @@ python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
  --save_mosaic
 
 python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_400_4/Hologram/hologram_amp_R.npy \
- --pha_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_400_4/Hologram/hologram_phase_R.npy \
- --amp_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_400_4/Hologram/hologram_amp_G.npy \
- --pha_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_400_4/Hologram/hologram_phase_G.npy \
- --amp_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_400_4/Hologram/hologram_amp_B.npy \
- --pha_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_400_4/Hologram/hologram_phase_B.npy \
- --outdir /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_400_4/Multiview_ReconFromHologram_0.65 \
+ --amp_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_R.npy \
+ --pha_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_R.npy \
+ --amp_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_G.npy \
+ --pha_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_G.npy \
+ --amp_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_B.npy \
+ --pha_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_B.npy \
+ --outdir /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Multiview_ReconFromHologram_0.65 \
  --wavelength 532e-9 \
  --vis_mode percentile \
  --pitch 2e-6 \
- --zmin -0.053 --zmax -0.050 --step 0.001 \
+ --zmin -0.051 --zmax -0.050 --step 0.001 \
  --gamma 0.65 \
  --out_size 2048 \
  --view_grid 9 \

@@ -110,6 +110,21 @@ Example:
         --zmin 4.5 --zmax 5.5 --step 0.01 \
         --gamma 1 --out_size 2048
 
+        python ./model/Reconstruction_layer.py \
+        --amp_r  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Red_amp.npy \
+        --pha_r  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Red_phase.npy \
+        --amp_g  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Green_amp.npy \
+        --pha_g  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Green_phase.npy \
+        --amp_b  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Blue_amp.npy \
+        --pha_b  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Blue_phase.npy \
+        --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/50k/ASM_ReconFromHologram \
+        --mode asm_pad \
+        --wavelength 532e-9 \
+        --vis_mode mesh_style \
+        --pitch 8e-6 \
+        --zmin 0.045 --zmax 0.055 --step 0.0001 \
+        --gamma 1 --out_size 2048
+
     Voxel:
         python ./model/Reconstruction_layer.py \
         --amp_r /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/amp_R.npy \
@@ -427,9 +442,18 @@ def main():
     print(f"[INFO] vis_mode = {args.vis_mode}")
 
     for z in tqdm(z_list, desc=f"Recon ({args.mode}) RGB"):
-        rec_R = propagate(holo_R, z, args.wavelength, args.pitch)
-        rec_G = propagate(holo_G, z, args.wavelength, args.pitch)
-        rec_B = propagate(holo_B, z, args.wavelength, args.pitch)
+        if args.mode == "asm_pad":
+            holo_R_use = holo_R - np.mean(holo_R)
+            holo_G_use = holo_G - np.mean(holo_G)
+            holo_B_use = holo_B - np.mean(holo_B)
+        else:
+            holo_R_use = holo_R
+            holo_G_use = holo_G
+            holo_B_use = holo_B
+
+        rec_R = propagate(holo_R_use, z, args.wavelength, args.pitch)
+        rec_G = propagate(holo_G_use, z, args.wavelength, args.pitch)
+        rec_B = propagate(holo_B_use, z, args.wavelength, args.pitch)
 
         if args.use_intensity:
             img_R = (np.abs(rec_R) ** 2).astype(np.float32)
