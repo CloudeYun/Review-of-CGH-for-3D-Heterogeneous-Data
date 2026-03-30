@@ -81,21 +81,10 @@ conda env create -f environment.yml
 
 层重建结果：
 
-<div style="display: flex; gap: 12px; justify-content: center;">
-  <figure style="text-align: center; margin: 0;">
-    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%" style="display: block; margin: 0 auto;">
-    <figcaption>图1：50mm</figcaption>
-  </figure>
-
-  <figure style="text-align: center; margin: 0;">
-    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%" style="display: block; margin: 0 auto;">
-    <figcaption>图2：51mm</figcaption>
-  </figure>
-
-  <figure style="text-align: center; margin: 0;">
-    <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%" style="display: block; margin: 0 auto;">
-    <figcaption>图3：52mm</figcaption>
-  </figure>
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%" alt="img3">
 </div>
 
 多视重建结果
