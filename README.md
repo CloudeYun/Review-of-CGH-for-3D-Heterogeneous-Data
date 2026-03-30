@@ -79,6 +79,12 @@ conda env create -f environment.yml
 
 详细指导内容：
 
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Layer/layer_recon_3.png" width="30%" alt="img3">
+</div>
+
 ### 2.点云数据 ❄️
 
 生成点云数据代码：
