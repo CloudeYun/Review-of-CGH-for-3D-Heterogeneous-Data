@@ -163,6 +163,10 @@ conda env create -f environment.yml
 
 多视重建结果
 
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/LightField/LF_multiview_recon.png" width="80%" alt="img1">
+</div>
+
 ### 4.Mesh数据 ▶️
 
 生成Mesh数据代码：[Mesh_data](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2Mesh.py)
