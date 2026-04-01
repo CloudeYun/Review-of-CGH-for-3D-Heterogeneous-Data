@@ -235,9 +235,9 @@ conda env create -f environment.yml
 
 ### 7.重建 🪜
 
-层重建代码：[Layer Reconstruction] (https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Reconstruction_layer.py)
+层重建代码：[Layer Reconstruction](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Reconstruction_layer.py)
 
-多视角重建代码：[Multiview Reconstruction] (https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Reconstruction_mutiview.py)
+多视角重建代码：[Multiview Reconstruction](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/model/Reconstruction_mutiview.py)
 
 详细指导内容: [Reconstruction_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/Reconstruction.md)
 
