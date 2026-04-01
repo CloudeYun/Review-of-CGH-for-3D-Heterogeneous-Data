@@ -211,6 +211,10 @@ conda env create -f environment.yml
 
 多视重建结果
 
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh/Mesh_multiview_recon.png" width="80%" alt="img1">
+</div>
+
 ### 5.体素数据 ♦️
 
 生成体素数据代码：[Voxel_data](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/dataset/Obj2Vox.py)

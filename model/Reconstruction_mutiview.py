@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Light-field style multi-view reconstruction from complex RGB holograms
+multi-view reconstruction from complex RGB holograms
 (amp_R/G/B.npy + phase_R/G/B.npy)
+
+Author: Hao Yun
+Date: 2026-04-01
 
 Pipeline:
 1) load complex hologram U_h^c = amp * exp(j*phase)
@@ -113,55 +116,20 @@ python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
  --max_shift_ratio 0.8 \
  --save_mosaic
 
-python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/NewMesh4/BunnyDragon_RGB_FromTxtColor_200k_10_0.5/Holograms/channel_Red_amp.npy \
- --pha_r /workspace/yh/project/CGHReview/result/NewMesh4/BunnyDragon_RGB_FromTxtColor_200k_10_0.5/Holograms/channel_Red_phase.npy \
- --amp_g /workspace/yh/project/CGHReview/result/NewMesh4/BunnyDragon_RGB_FromTxtColor_200k_10_0.5/Holograms/channel_Green_amp.npy \
- --pha_g /workspace/yh/project/CGHReview/result/NewMesh4/BunnyDragon_RGB_FromTxtColor_200k_10_0.5/Holograms/channel_Green_phase.npy \
- --amp_b /workspace/yh/project/CGHReview/result/NewMesh4/BunnyDragon_RGB_FromTxtColor_200k_10_0.5/Holograms/channel_Blue_amp.npy \
- --pha_b /workspace/yh/project/CGHReview/result/NewMesh4/BunnyDragon_RGB_FromTxtColor_200k_10_0.5/Holograms/channel_Blue_phase.npy \
- --outdir /workspace/yh/project/CGHReview/result/NewMesh4/BunnyDragon_RGB_FromTxtColor_200k_10_0.5/Multiview_ReconFromHologram \
-  --wavelength 532e-9 \
-  --pitch 8e-6 \
-  --mode asm_pad \
-  --remove_dc 1 \
-  --vis_mode mesh_style \
-  --zmin 10 --zmax 10.5 --step 0.5 \
-  --view_grid 9 --aperture_ratio 0.35 --max_shift_ratio 0.8 \
-  --gamma 0.9 --out_size 2048 --save_mosaic
-
-  python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/NewMesh2/BunnyDragon_RGB_FromTxtColor_2k_largescale3/Holograms/channel_Red_amp.npy \
- --pha_r /workspace/yh/project/CGHReview/result/NewMesh2/BunnyDragon_RGB_FromTxtColor_2k_largescale3/Holograms/channel_Red_phase.npy \
- --amp_g /workspace/yh/project/CGHReview/result/NewMesh2/BunnyDragon_RGB_FromTxtColor_2k_largescale3/Holograms/channel_Green_amp.npy \
- --pha_g /workspace/yh/project/CGHReview/result/NewMesh2/BunnyDragon_RGB_FromTxtColor_2k_largescale3/Holograms/channel_Green_phase.npy \
- --amp_b /workspace/yh/project/CGHReview/result/NewMesh2/BunnyDragon_RGB_FromTxtColor_2k_largescale3/Holograms/channel_Blue_amp.npy \
- --pha_b /workspace/yh/project/CGHReview/result/NewMesh2/BunnyDragon_RGB_FromTxtColor_2k_largescale3/Holograms/channel_Blue_phase.npy \
- --outdir /workspace/yh/project/CGHReview/result/NewMesh2/BunnyDragon_RGB_FromTxtColor_2k_largescale3/Multiview_ReconFromHologram \
-  --wavelength 532e-9 \
-  --pitch 8e-6 \
-  --mode asm_pad \
-  --remove_dc 1 \
-  --vis_mode mesh_style \
-  --zmin 9.95 --zmax 10.05 --step 0.05 \
-  --view_grid 9 --aperture_ratio 0.35 --max_shift_ratio 0.8 \
-  --gamma 0.9 --out_size 2048 --save_mosaic
-
-
     python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Red_amp.npy \
- --pha_r /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Red_phase.npy \
- --amp_g /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Green_amp.npy \
- --pha_g /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Green_phase.npy \
- --amp_b /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Blue_amp.npy \
- --pha_b /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Blue_phase.npy \
- --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Multiview_ReconFromHologram \
+ --amp_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Red_amp.npy \
+ --pha_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Red_phase.npy \
+ --amp_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Green_amp.npy \
+ --pha_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Green_phase.npy \
+ --amp_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Blue_amp.npy \
+ --pha_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Blue_phase.npy \
+ --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Multiview_ReconFromHologram \
   --wavelength 532e-9 \
   --pitch 8e-6 \
   --mode asm_pad \
   --remove_dc 1 \
   --vis_mode mesh_style \
-  --zmin 4.9 --zmax 5 --step 0.05 \
+  --zmin 4.95 --zmax 5 --step 0.05 \
   --view_grid 9 --aperture_ratio 0.35 --max_shift_ratio 0.8 \
   --gamma 0.9 --out_size 2048 --save_mosaic
 
