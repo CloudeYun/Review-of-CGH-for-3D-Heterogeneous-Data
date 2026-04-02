@@ -129,7 +129,7 @@ python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
   --mode asm_pad \
   --remove_dc 1 \
   --vis_mode mesh_style \
-  --zmin 2 --zmax 2.05 --step 0.05 \
+  --zmin 1.9 --zmax 1.95 --step 0.05 \
   --view_grid 9 --aperture_ratio 0.35 --max_shift_ratio 0.8 \
   --gamma 0.9 --out_size 2048 --save_mosaic
 
