@@ -117,19 +117,19 @@ python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
  --save_mosaic
 
     python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Red_amp.npy \
- --pha_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Red_phase.npy \
- --amp_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Green_amp.npy \
- --pha_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Green_phase.npy \
- --amp_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Blue_amp.npy \
- --pha_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Holograms/channel_Blue_phase.npy \
- --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/Multiview_ReconFromHologram \
+ --amp_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Red_amp.npy \
+ --pha_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Red_phase.npy \
+ --amp_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Green_amp.npy \
+ --pha_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Green_phase.npy \
+ --amp_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Blue_amp.npy \
+ --pha_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Blue_phase.npy \
+ --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Multiview_ReconFromHologram \
   --wavelength 532e-9 \
   --pitch 8e-6 \
   --mode asm_pad \
   --remove_dc 1 \
   --vis_mode mesh_style \
-  --zmin 4.95 --zmax 5 --step 0.05 \
+  --zmin 2 --zmax 2.05 --step 0.05 \
   --view_grid 9 --aperture_ratio 0.35 --max_shift_ratio 0.8 \
   --gamma 0.9 --out_size 2048 --save_mosaic
 
