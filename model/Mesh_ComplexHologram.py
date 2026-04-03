@@ -22,11 +22,11 @@ Description:
 Example:
     python ./model/Mesh_ComplexHologram.py \
       --mesh_txt /workspace/yh/project/CGHReview/dataset/Mesh3_n/BunnyDragon_RGB_50k_y0.txt \
-      --outdir   /workspace/yh/project/CGHReview/result/Mesh3_n/50k_3 \
-      --Nx 4096 --Ny 4096 --dx 8e-6 --dy 8e-6 \
+      --outdir   /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4 \
+      --Nx 4096 --Ny 4096 --dx 8e-6 --dy 8e-6 \cz
       --lam_r 532e-9 --lam_g 532e-9 --lam_b 532e-9 \
       --shiftZ 0.05 --objectScaleRatio 2 \
-      --target_depth 0.008 --z_boost 1.0 \
+      --target_depth 0.01 --z_boost 1.0 \
       --shading continuous --illu 0 0 1 --log_every 200 \
       --z_min 0.045 --z_max 0.055 --z_step 0.0001 \
       --save_every 1 \

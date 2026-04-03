@@ -59,8 +59,8 @@ def add_text_to_image(
 
 
 if __name__ == "__main__":
-    input_image = "/workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/recon_rgb_crop1_ROI/recon_rgb_z_5.040000.png"
-    output_image = "/workspace/yh/project/CGHReview/result/Mesh3_n/50k_4/recon_rgb_crop1_ROI/recon_rgb_z_5.040000_text.png"
+    input_image = "/workspace/yh/project/CGHReview/result/Mesh3_n/50k_2/recon_rgb_crop_ROI/recon_rgb_z_0.051500.png"
+    output_image = "/workspace/yh/project/CGHReview/result/Mesh3_n/50k_2/recon_rgb_crop_ROI/recon_rgb_z_0.051500_text.png"
     text = "focus"
 
     add_text_to_image(

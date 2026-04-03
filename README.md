@@ -175,6 +175,14 @@ conda env create -f environment.yml
 
 详细指导内容：[Mesh_README](https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/README/Mesh.md)
 
+层重建结果: 50mm --------------------> 53mm
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/Mesh_resize/Mesh_recon_3.png" width="30%" alt="img3">
+</div>
+
 层重建结果：1000mm --------------------> 1060mm(物体等比例扩大20倍)
 
 <div align="center">
