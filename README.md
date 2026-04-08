@@ -293,6 +293,14 @@ Mesh 数据的突出优势在于其具有明确的几何拓扑结构，场景表
 
 详细指导内容：
 
+层重建结果：50mm --------------------> 53mm
+
+<div align="center">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/NeRF_resize/NeRF_recon_1.png" width="30%" alt="img1">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/NeRF_resize/NeRF_recon_2.png" width="30%" alt="img2">
+  <img src="https://github.com/CloudeYun/Review-of-CGH-for-3D-Heterogeneous-Data/blob/main/result/NeRF_resize/NeRF_recon_3.png" width="30%" alt="img3">
+</div>
+
 神经场数据以 NeRF 为代表，其主要特点在于利用一组二维图像及其对应的相机位姿，对场景中的体密度与视角相关辐射信息进行连续表示，从而在无需显式存储大量点、面或体元的情况下，实现对整个三维场景的紧凑表达与新视角合成。因此，对于神经场数据，实验部分采用了基于神经场重建与光场采样相结合的全息图生成方法，即首先通过环绕场景拍摄得到稀疏视角图像，并利用 Instant-NGP 对场景进行快速神经场建模；随后基于已训练的 NeRF 模型模拟光场相机阵列对场景进行多视角采样，得到对应的光场表示，再结合光场全息生成模型完成三维场景的全息图生成与重建。
 
 基于这种表示方式，神经场数据能够以较为紧凑的形式保留场景的整体外观信息和连续视角变化特征，在场景完整性表达、自由视点合成以及存储效率方面具有明显优势。相较于传统显式三维表示，神经场不需要直接构建复杂的点、面或体元结构，便能够恢复场景的整体空间外观，因此特别适用于三维场景重建、自由视点显示以及对存储效率和场景完整性要求较高的全息显示前端表示任务。
