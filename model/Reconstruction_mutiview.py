@@ -1,158 +1,54 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-multi-view reconstruction from complex RGB holograms
-(amp_R/G/B.npy + phase_R/G/B.npy)
+Reconstruct Multi-View RGB Images from Complex Holograms
 
 Author: Hao Yun
 Date: 2026-04-01
 
+Description:
+    This script reconstructs multi-view RGB images from hologram amplitude
+    and phase arrays. It propagates each RGB complex hologram to the requested
+    depth and selects shifted sub-apertures in the Fourier plane to synthesize
+    different observation views.
+
 Pipeline:
-1) load complex hologram U_h^c = amp * exp(j*phase)
-2) ASM propagate to depth z -> U_z^c
-3) Fourier-plane sub-aperture selection (crop a window around shifted center) -> different views
-4) IFFT -> view field -> |U| or |U|^2
-5) RGB global normalize + gamma, resize to out_size (pad)
+    1. Load the RGB hologram amplitude and phase arrays
+    2. Construct and propagate the complex holograms to depth z
+    3. Select shifted sub-apertures in the Fourier plane
+    4. Apply the inverse Fourier transform to obtain each view
+    5. Normalize, resize, and save the multi-view RGB images
 
 Output structure:
-outdir/
-  z_+0.060000m/
-    v_00_00.png
-    v_00_01.png
-    ...
+    outdir/
+        z_+0.052000m/
+            v_00_00.png
+            v_00_01.png
+            ...
+            mosaic.png
 
-
-python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/amp_R.npy \
- --pha_r /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/pha_R.npy \
- --amp_g /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/amp_G.npy \
- --pha_g /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/pha_G.npy \
- --amp_b /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/amp_B.npy \
- --pha_b /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Hologram/pha_B.npy \
-  --outdir /workspace/yh/project/CGHReview/result/Layer/LDI_single_complexRGB_20bins_50_53mm/Multiview_ReconFromHologram \
- --wavelength 532e-9 \
- --pitch 4e-6 \
- --zmin 0.05 --zmax 0.052 --step 0.0005 \
- --gamma 0.9 \
- --out_size 2048 \
- --view_grid 9 \
- --aperture_ratio 0.35 \
- --max_shift_ratio 0.8 \
- --save_mosaic
-
- python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_100bins_50_53mm/Hologram/amp_R.npy \
- --pha_r /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_100bins_50_53mm/Hologram/pha_R.npy \
- --amp_g /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_100bins_50_53mm/Hologram/amp_G.npy \
- --pha_g /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_100bins_50_53mm/Hologram/pha_G.npy \
- --amp_b /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_100bins_50_53mm/Hologram/amp_B.npy \
- --pha_b /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_100bins_50_53mm/Hologram/pha_B.npy \
-  --outdir /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_100bins_50_53mm/Multiview_ReconFromHologram_65 \
- --wavelength 532e-9 \
- --pitch 4e-6 \
- --vis_mode percentile \
- --zmin 0.051 --zmax 0.052 --step 0.001 \
- --gamma 0.65 \
- --out_size 2048 \
- --view_grid 9 \
- --aperture_ratio 0.35 \
- --max_shift_ratio 0.8 \
- --save_mosaic
-
- python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_100bins_3e8_50_53mm_2/Hologram/amp_R.npy \
- --pha_r /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_100bins_3e8_50_53mm_2/Hologram/phase_R.npy \
- --amp_g /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_100bins_3e8_50_53mm_2/Hologram/amp_G.npy \
- --pha_g /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_100bins_3e8_50_53mm_2/Hologram/phase_G.npy \
- --amp_b /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_100bins_3e8_50_53mm_2/Hologram/amp_B.npy \
- --pha_b /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_100bins_3e8_50_53mm_2/Hologram/phase_B.npy \
- --outdir /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_100bins_3e8_50_53mm_2/Multiview_ReconFromHologram_65 \
- --wavelength 532e-9 \
- --pitch 5e-6 \
- --zmin 0.051 --zmax 0.052 --step 0.001 \
- --vis_mode percentile \
- --gamma 0.65 \
- --out_size 2048 \
- --view_grid 9 \
- --aperture_ratio 0.35 \
- --max_shift_ratio 0.8 \
- --save_mosaic
-
-
-python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_R.npy \
- --pha_r /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_R.npy \
- --amp_g /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_G.npy \
- --pha_g /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_G.npy \
- --amp_b /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_B.npy \
- --pha_b /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_B.npy \
- --outdir /workspace/yh/project/CGHReview/result/LightField/orth_RGB_complexHologram_20_400/Multiview_ReconFromHologram_1 \
- --wavelength 532e-9 \
- --pitch 2e-6 \
- --zmin -0.052 --zmax -0.050 --step 0.0005 \
- --gamma 1 \
- --out_size 2048 \
- --view_grid 9 \
- --aperture_ratio 0.35 \
- --max_shift_ratio 0.8 \
- --save_mosaic
-
-python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_R.npy \
- --pha_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_R.npy \
- --amp_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_G.npy \
- --pha_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_G.npy \
- --amp_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_B.npy \
- --pha_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_B.npy \
- --outdir /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Multiview_ReconFromHologram_0.65 \
- --wavelength 532e-9 \
- --vis_mode percentile \
- --pitch 2e-6 \
- --zmin -0.051 --zmax -0.050 --step 0.001 \
- --gamma 0.65 \
- --out_size 2048 \
- --view_grid 9 \
- --aperture_ratio 0.35 \
- --max_shift_ratio 0.8 \
- --save_mosaic
-
-    python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Red_amp.npy \
- --pha_r /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Red_phase.npy \
- --amp_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Green_amp.npy \
- --pha_g /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Green_phase.npy \
- --amp_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Blue_amp.npy \
- --pha_b /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Holograms/channel_Blue_phase.npy \
- --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/50k_8/Multiview_ReconFromHologram \
-  --wavelength 532e-9 \
-  --pitch 8e-6 \
-  --mode asm_pad \
-  --remove_dc 1 \
-  --vis_mode mesh_style \
-  --zmin 1.9 --zmax 1.95 --step 0.05 \
-  --view_grid 9 --aperture_ratio 0.35 --max_shift_ratio 0.8 \
-  --gamma 0.9 --out_size 2048 --save_mosaic
-
-
- python /workspace/yh/project/CGHReview/model/Reconstruction_RGB_mutiview.py \
- --amp_r /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/amp_R.npy \
- --pha_r /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/pha_R.npy \
- --amp_g /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/amp_G.npy \
- --pha_g /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/pha_G.npy \
- --amp_b /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/amp_B.npy \
- --pha_b /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/pha_B.npy \
-  --outdir /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Multiview_ReconFromHologram_65 \
- --wavelength 532e-9 \
- --pitch 4e-6 \
- --zmin 0.051 --zmax 0.053 --step 0.001 \
- --vis_mode percentile \
- --gamma 0.65 \
- --out_size 2048 \
- --view_grid 9 \
- --aperture_ratio 0.35 \
- --max_shift_ratio 0.8 \
- --save_mosaic
- 
+Example:
+    python ./model/Reconstruction_mutiview.py \
+        --amp_r ./result/Layer/Hologram/amp_R.npy \
+        --pha_r ./result/Layer/Hologram/pha_R.npy \
+        --amp_g ./result/Layer/Hologram/amp_G.npy \
+        --pha_g ./result/Layer/Hologram/pha_G.npy \
+        --amp_b ./result/Layer/Hologram/amp_B.npy \
+        --pha_b ./result/Layer/Hologram/pha_B.npy \
+        --outdir ./result/Layer/Multiview_Reconstruction \
+        --mode asm \
+        --wavelength 532e-9 \
+        --pitch 4e-6 \
+        --zmin 0.050 \
+        --zmax 0.053 \
+        --step 0.001 \
+        --vis_mode percentile \
+        --gamma 0.65 \
+        --out_size 2048 \
+        --view_grid 9 \
+        --aperture_ratio 0.35 \
+        --max_shift_ratio 0.8 \
+        --save_mosaic
 """
 
 import os

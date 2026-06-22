@@ -21,8 +21,8 @@ Pipeline:
 
 Example:
     python ./model/Layer_ComplexHologram.py \
-        --data_root ./dataset/Layer/BunnyDragonColor_RGBD \
-        --out_root ./result/Layer/RGBD_3bins \
+        --data_root ./dataset/Layer/BunnyDragonColor_LDI \
+        --out_root ./result/Layer/LDI_3bins \
         --target_size 2048 \
         --z_min_mm 50.0 \
         --z_max_mm 53.0 \

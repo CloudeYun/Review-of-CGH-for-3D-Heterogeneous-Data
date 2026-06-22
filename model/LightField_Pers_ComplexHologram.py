@@ -24,8 +24,8 @@ Pipeline:
 
 Example:
     python ./model/LightField_Pers_ComplexHologram.py \
-      --lf_root /workspace/yh/project/CGHReview/dataset/LightField3/LF_pers_40x40_rgb_fix_800_50_53mm_parallel_3 \
-      --output_dir /workspace/yh/project/CGHReview/result_test\
+      --lf_root ./dataset/LightField/LF_pers_40x40_800 \
+      --output_dir ./result\LightField/LF_pers_40x40_800 \
       --fov_deg 7 \
       --d0 -0.050 \
       --pose_unit mm \
@@ -39,7 +39,7 @@ Example:
       --save_recon_png \
       --p_low 1.0 \
       --p_high 99.0 \
-      --z_min -0.049 \
+      --z_min -0.052 \
       --z_max -0.048 \
       --z_step 0.001
 

@@ -1,38 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Generate Complex RGB Holograms from Rendered Voxel Bins and Reconstruct RGB Slices
+Generate Complex RGB Holograms from Voxel Volume Integral and Reconstruct RGB Slices
 
 Author: Hao Yun
-Date: 2026-03-25
+Date: 2026-04-13
 
 Description:
-    This script loads a voxel occupancy volume from an NPZ file, renders
-    per-bin mesh subsets after optional rotation, converts rendered RGB bins
-    into complex RGB holograms using a shared random phase, and reconstructs
-    RGB slices at all bin-center depths.
+    This script directly uses voxel occupancy volume to generate holograms
+    through a volume-integral-style discretization, while preserving the
+    original object orientation logic:
+        1) object Euler rotation
+        2) binning along rotated object axis
+        3) camera view projection using view_elev / view_azim
+        4) volume integration along camera optical axis
 
 Important note:
-    This version is intended to preserve the numerical behavior of the original
-    script as closely as possible. The default settings and core computation
-    logic are intentionally kept unchanged.
-
-Pipeline:
-    1. Load voxel occupancy grid from NPZ
-    2. Extract full-surface mesh with marching cubes
-    3. Rotate the mesh vertices if needed
-    4. Slice the rotated mesh into bins along a selected axis
-    5. Render each bin to RGB + mask
-    6. Generate complex RGB holograms using shared random phase
-    7. Save complex holograms and amplitude/phase maps
-    8. Reconstruct RGB slices at all bin-center depths
+    - This version no longer uses marching cubes or surface rendering.
+    - It keeps the original object rotation parameters.
+    - It also restores the original "render view" effect by explicitly
+      introducing a camera-coordinate transform before projection.
+    - Since the NPZ is assumed to contain only occupancy "occ", the generated
+      RGB hologram uses the same amplitude for R/G/B channels.
+      If color voxel data is available later, this script can be extended.
 
 Example:
-    python ./model/Voxel_ComplexHologram.py \
-      --npz_path /workspace/yh/project/CGHReview/dataset/Voxel3/BunnyDragon_voxel.npz \
-      --out_root ./result/Voxel/100bins\
-      --num_bins 100 
-      
+    python ./model/Voxel_ComplexHologram_VolumeIntegral.py \
+      --npz_path ./dataset/Voxel/BunnyDragon_voxel.npz \
+      --out_root ./result/Voxel/volume_integral \
+      --d_percentage 1.0
 """
 
 import os
@@ -42,10 +38,7 @@ import numpy as np
 import cv2
 from tqdm import tqdm
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-from skimage.measure import marching_cubes
+from scipy.ndimage import gaussian_filter, affine_transform
 
 
 # -----------------------------------------------------------------------------
@@ -64,14 +57,14 @@ def str2bool(value):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Generate complex RGB holograms from rendered voxel bins and reconstruct RGB slices."
+        description="Generate complex RGB holograms from voxel volume integral and reconstruct RGB slices."
     )
 
     parser.add_argument(
         "--npz_path",
         type=str,
         required=True,
-        help="Path to the voxel NPZ file."
+        help="Path to the voxel NPZ file. Must contain key 'occ'."
     )
     parser.add_argument(
         "--out_root",
@@ -80,27 +73,21 @@ def parse_args():
         help="Output root directory."
     )
 
-    # Image size
+    # Output image size
     parser.add_argument(
         "--target_height",
         type=int,
         default=2048,
-        help="Rendered image height."
+        help="Target hologram/reconstruction image height."
     )
     parser.add_argument(
         "--target_width",
         type=int,
         default=2048,
-        help="Rendered image width."
-    )
-    parser.add_argument(
-        "--dpi",
-        type=int,
-        default=256,
-        help="Matplotlib rendering DPI."
+        help="Target hologram/reconstruction image width."
     )
 
-    # Fixed depth mapping
+    # Fixed physical depth mapping
     parser.add_argument(
         "--z_min_mm",
         type=float,
@@ -113,20 +100,31 @@ def parse_args():
         default=53.0,
         help="Maximum mapped depth in mm."
     )
-    parser.add_argument(
+    differential_group = parser.add_mutually_exclusive_group()
+    differential_group.add_argument(
+        "--d_percentage",
+        type=float,
+        default=None,
+        help=(
+            "Thickness of one differential volume layer as a percentage of "
+            "the complete slicing axis. For example, 1.0 means 100 layers."
+        )
+    )
+    differential_group.add_argument(
         "--num_bins",
+        dest="legacy_num_bins",
         type=int,
-        default=100,
-        help="Number of depth bins."
+        default=None,
+        help=argparse.SUPPRESS
     )
 
-    # Bin slicing axis after rotation
+    # Bin slicing axis after object rotation
     parser.add_argument(
         "--bin_axis_rotated",
         type=str,
         default="y",
         choices=["x", "y", "z"],
-        help="Axis used for binning after rotation."
+        help="Axis used for binning after object rotation."
     )
     parser.add_argument(
         "--bin_reverse",
@@ -135,58 +133,69 @@ def parse_args():
         help="Whether to reverse the rotated bin coordinate before discretization."
     )
 
-    # Marching cubes / render
+    # Volume preprocessing
     parser.add_argument(
         "--iso_sigma",
         type=float,
         default=0.15,
-        help="Gaussian smoothing sigma before marching cubes."
-    )
-    parser.add_argument(
-        "--iso_level",
-        type=float,
-        default=0.33,
-        help="Marching cubes isosurface level."
-    )
-    parser.add_argument(
-        "--iso_max_dim",
-        type=int,
-        default=800,
-        help="Maximum dimension used for downsampled marching cubes."
+        help="Gaussian smoothing sigma applied directly to the voxel volume."
     )
     parser.add_argument(
         "--min_voxels_to_render",
         type=int,
         default=50,
-        help="Minimum occupied voxels needed to render."
+        help="Minimum occupied voxels needed to proceed."
     )
 
+    # These are now truly used to restore the original viewing direction
     parser.add_argument(
         "--view_elev",
         type=float,
         default=25.0,
-        help="3D render camera elevation."
+        help="Camera elevation angle, consistent with the original matplotlib render."
     )
     parser.add_argument(
         "--view_azim",
         type=float,
         default=-90.0,
-        help="3D render camera azimuth."
+        help="Camera azimuth angle, consistent with the original matplotlib render."
+    )
+
+    # Optional image coordinate correction
+    parser.add_argument(
+        "--camera_flip_ud",
+        type=str2bool,
+        default=True,
+        help="Flip the projected image vertically after camera projection."
+    )
+    parser.add_argument(
+        "--camera_flip_lr",
+        type=str2bool,
+        default=False,
+        help="Flip the projected image horizontally after camera projection."
+    )
+
+    # Kept for compatibility with old CLI
+    parser.add_argument(
+        "--dpi",
+        type=int,
+        default=256,
+        help="Kept for compatibility; not used in volume-integral mode."
     )
     parser.add_argument(
         "--black_bg",
         type=str2bool,
         default=True,
-        help="Use black background when rendering. Default matches the original script."
+        help="Kept for compatibility; not used in volume-integral mode."
     )
     parser.add_argument(
         "--no_axes",
         type=str2bool,
         default=True,
-        help="Hide axes when rendering. Default matches the original script."
+        help="Kept for compatibility; not used in volume-integral mode."
     )
 
-    # Rotation
+    # Rotation (same as original logic)
     parser.add_argument(
         "--rot_yaw_deg",
         type=float,
@@ -209,15 +218,15 @@ def parse_args():
         "--rotate_around_center",
         type=str2bool,
         default=True,
-        help="Rotate around mesh center. Default matches the original script."
+        help="Rotate around volume center."
     )
 
-    # Mask from rendered RGB
+    # Mask threshold
     parser.add_argument(
         "--mask_thresh",
         type=float,
         default=1e-4,
-        help="Luminance threshold used to convert rendered RGB to binary mask."
+        help="Threshold used on normalized slab-integral amplitude to generate mask."
     )
 
     # Optical parameters
@@ -265,7 +274,7 @@ def parse_args():
         "--use_intensity",
         type=str2bool,
         default=False,
-        help="False: |U|, True: |U|^2. Default matches the original script."
+        help="False: |U|, True: |U|^2."
     )
     parser.add_argument(
         "--gamma",
@@ -296,23 +305,43 @@ def parse_args():
         "--norm_p_low",
         type=float,
         default=1.0,
-        help="Lower percentile used in normalize_to_u8 (kept for behavior compatibility)."
+        help="Lower percentile used in normalize_to_u8 (kept for compatibility)."
     )
     parser.add_argument(
         "--norm_p_high",
         type=float,
         default=99.0,
-        help="Upper percentile used in normalize_to_u8 (kept for behavior compatibility)."
+        help="Upper percentile used in normalize_to_u8 (kept for compatibility)."
     )
 
     parser.add_argument(
         "--fullview_name",
         type=str,
         default="full_volume_view.png",
-        help="Filename for the full-volume rendered view."
+        help="Filename for the full-volume projected preview."
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    if args.legacy_num_bins is not None:
+        if args.legacy_num_bins <= 0:
+            parser.error("--num_bins must be positive.")
+        args.d_percentage = 100.0 / float(args.legacy_num_bins)
+        print(
+            "[WARN] --num_bins is deprecated; use "
+            f"--d_percentage {args.d_percentage:.8g} instead."
+        )
+    elif args.d_percentage is None:
+        args.d_percentage = 1.0
+
+    if not (0.0 < args.d_percentage <= 100.0):
+        parser.error("--d_percentage must satisfy 0 < d_percentage <= 100.")
+
+    # The requested differential percentage is converted to an integer number
+    # of equal layers that completely cover the volume.
+    args.num_differentials = max(1, int(np.ceil(100.0 / args.d_percentage)))
+    args.effective_d_percentage = 100.0 / float(args.num_differentials)
+    return args
 
 
 # -----------------------------------------------------------------------------
@@ -381,34 +410,12 @@ def save_phase_image(phase: np.ndarray, path: str):
     cv2.imwrite(path, image)
 
 
-def normalize_rgb_global_with_gamma(rgb_float: np.ndarray, gamma: float = 1.0):
-    """
-    Original behavior:
-        global min-max normalization + gamma correction
-    """
-    x = np.asarray(rgb_float, dtype=np.float32)
-    x = np.clip(x, 0.0, None)
-
-    x = x - x.min()
-    max_val = float(x.max())
-    if max_val > 1e-8:
-        x = x / max_val
-
-    if gamma is not None and abs(gamma - 1.0) > 1e-12:
-        x = np.power(np.clip(x, 0.0, 1.0), float(gamma))
-
-    return (x * 255.0).clip(0, 255).astype(np.uint8)
-
-
 def normalize_rgb_percentile_with_gamma(
     rgb_float: np.ndarray,
     gamma: float = 1.0,
     p_low: float = 1.0,
     p_high: float = 99.0
 ):
-    """
-    Percentile-based normalization + gamma correction.
-    """
     x = np.asarray(rgb_float, dtype=np.float32)
     x = np.clip(x, 0.0, None)
 
@@ -428,7 +435,8 @@ def resize_keep_aspect_to_square_rgb(img_u8: np.ndarray, target: int = 2048, pad
     new_width = max(1, int(round(width * scale)))
     new_height = max(1, int(round(height * scale)))
 
-    resized = cv2.resize(img_u8, (new_width, new_height), interpolation=cv2.INTER_AREA)
+    interp = cv2.INTER_AREA if scale < 1.0 else cv2.INTER_LINEAR
+    resized = cv2.resize(img_u8, (new_width, new_height), interpolation=interp)
 
     out = np.full((target, target, 3), pad_value, dtype=np.uint8)
     y0 = (target - new_height) // 2
@@ -437,68 +445,42 @@ def resize_keep_aspect_to_square_rgb(img_u8: np.ndarray, target: int = 2048, pad
     return out
 
 
-def set_black_background(fig, ax):
-    fig.patch.set_facecolor("black")
-    ax.set_facecolor("black")
-    try:
-        ax.xaxis.pane.set_facecolor((0, 0, 0, 0))
-        ax.yaxis.pane.set_facecolor((0, 0, 0, 0))
-        ax.zaxis.pane.set_facecolor((0, 0, 0, 0))
-        ax.xaxis.pane.set_edgecolor((0, 0, 0, 0))
-        ax.yaxis.pane.set_edgecolor((0, 0, 0, 0))
-        ax.zaxis.pane.set_edgecolor((0, 0, 0, 0))
-    except Exception:
-        pass
+def resize_keep_aspect_to_canvas_gray(img_f32: np.ndarray, target_h: int, target_w: int, pad_value: float = 0.0):
+    height, width = img_f32.shape
+    scale = min(float(target_h) / float(height), float(target_w) / float(width))
+    new_width = max(1, int(round(width * scale)))
+    new_height = max(1, int(round(height * scale)))
+
+    interp = cv2.INTER_AREA if scale < 1.0 else cv2.INTER_LINEAR
+    resized = cv2.resize(img_f32.astype(np.float32), (new_width, new_height), interpolation=interp)
+
+    out = np.full((target_h, target_w), pad_value, dtype=np.float32)
+    y0 = (target_h - new_height) // 2
+    x0 = (target_w - new_width) // 2
+    out[y0:y0 + new_height, x0:x0 + new_width] = resized
+    return out
+
+
+def save_gray_preview(path: str, img_f32: np.ndarray):
+    x = np.asarray(img_f32, dtype=np.float32)
+    x = x - x.min()
+    if x.max() > 1e-8:
+        x = x / x.max()
+    u8 = (x * 255.0).clip(0, 255).astype(np.uint8)
+    cv2.imwrite(path, u8)
 
 
 # -----------------------------------------------------------------------------
-# Geometry processing
+# Geometry / camera transforms
 # -----------------------------------------------------------------------------
-def preprocess_volume(vol_zyx: np.ndarray, args):
-    nz, ny, nx = vol_zyx.shape
-    step = max(1, int(np.ceil(max(nz, ny, nx) / float(args.iso_max_dim))))
-    volume = vol_zyx[::step, ::step, ::step].astype(np.float32)
-
-    if args.iso_sigma and args.iso_sigma > 0:
-        try:
-            from scipy.ndimage import gaussian_filter
-            volume = gaussian_filter(volume, sigma=float(args.iso_sigma))
-        except Exception as exc:
-            print("[WARN] gaussian_filter failed, skip smoothing:", exc)
-
-    return volume, step
+AXIS2ID = {"x": 0, "y": 1, "z": 2}
 
 
-def mc_mesh(vol_zyx: np.ndarray, args):
-    if int((vol_zyx > 0.5).sum()) < args.min_voxels_to_render:
-        return None, None, None
-
-    volume, step = preprocess_volume(vol_zyx, args)
-    if np.max(volume) <= 1e-6:
-        return None, None, step
-
-    try:
-        verts, faces, _, _ = marching_cubes(volume, level=float(args.iso_level))
-    except Exception as exc:
-        print("[WARN] marching_cubes failed:", exc)
-        return None, None, step
-
-    return verts, faces, step
-
-
-def rotate_points_euler(pts_xyz: np.ndarray, yaw_deg, pitch_deg, roll_deg, around_center=True):
+def rotation_matrix_object(yaw_deg, pitch_deg, roll_deg):
     """
     Keep the original rotation order exactly:
         R = Rz @ Rx @ Ry
     """
-    pts = pts_xyz.astype(np.float32, copy=False)
-
-    if around_center:
-        center = pts.mean(0, keepdims=True)
-        pts = pts - center
-    else:
-        center = np.zeros((1, 3), np.float32)
-
     yaw, pitch, roll = map(np.deg2rad, [yaw_deg, pitch_deg, roll_deg])
 
     rot_z = np.array([[np.cos(yaw), -np.sin(yaw), 0],
@@ -511,155 +493,276 @@ def rotate_points_euler(pts_xyz: np.ndarray, yaw_deg, pitch_deg, roll_deg, aroun
                       [0, 1, 0],
                       [-np.sin(roll), 0, np.cos(roll)]], dtype=np.float32)
 
-    pts = pts @ (rot_z @ rot_x @ rot_y).T
-
-    if around_center:
-        pts = pts + center
-    return pts
+    return (rot_z @ rot_x @ rot_y).astype(np.float32)
 
 
-def render_mesh_to_png_and_rgb(verts_xyz, faces, out_png, global_xlim, global_ylim, global_zlim, args):
-    figsize = (args.target_width / args.dpi, args.target_height / args.dpi)
-    fig = plt.figure(figsize=figsize, dpi=args.dpi)
-    ax = fig.add_subplot(111, projection="3d")
+def camera_matrix_from_view(elev_deg, azim_deg):
+    """
+    Build a camera-coordinate rotation matrix from matplotlib-like elev/azim.
 
-    x = verts_xyz[:, 0]
-    y = verts_xyz[:, 1]
-    z = verts_xyz[:, 2]
+    Output axes:
+        x_cam: right
+        y_cam: up
+        z_cam: forward (from camera to scene)
+    """
+    elev = np.deg2rad(elev_deg)
+    azim = np.deg2rad(azim_deg)
 
-    ax.plot_trisurf(x, y, z, triangles=faces, linewidth=0.0, alpha=1.0, shade=True)
-    ax.view_init(elev=float(args.view_elev), azim=float(args.view_azim))
+    # Camera position on a unit sphere, looking toward the origin
+    cam_pos = np.array([
+        np.cos(elev) * np.cos(azim),
+        np.cos(elev) * np.sin(azim),
+        np.sin(elev)
+    ], dtype=np.float32)
 
-    ax.set_xlim(*global_xlim)
-    ax.set_ylim(*global_ylim)
-    ax.set_zlim(*global_zlim)
+    forward = -cam_pos
+    forward = forward / (np.linalg.norm(forward) + 1e-12)
 
-    x_span = float(global_xlim[1] - global_xlim[0])
-    y_span = float(global_ylim[1] - global_ylim[0])
-    z_span = float(global_zlim[1] - global_zlim[0])
-    try:
-        ax.set_box_aspect((x_span, y_span, z_span))
-    except Exception:
-        pass
+    up_world = np.array([0.0, 0.0, 1.0], dtype=np.float32)
+    if abs(float(np.dot(forward, up_world))) > 0.999:
+        up_world = np.array([0.0, 1.0, 0.0], dtype=np.float32)
 
-    if args.black_bg:
-        set_black_background(fig, ax)
+    right = np.cross(forward, up_world)
+    right = right / (np.linalg.norm(right) + 1e-12)
 
-    if args.no_axes:
-        ax.set_axis_off()
-        ax.grid(False)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_zticks([])
+    up = np.cross(right, forward)
+    up = up / (np.linalg.norm(up) + 1e-12)
 
-    fig.savefig(out_png, pad_inches=0, facecolor=fig.get_facecolor())
-    plt.close(fig)
+    # p_cam = R_cam @ p_world
+    r_cam = np.stack([right, up, forward], axis=0).astype(np.float32)
+    return r_cam
 
-    img_bgr = cv2.imread(out_png, cv2.IMREAD_COLOR)
-    if img_bgr is None:
-        raise RuntimeError(f"Failed to read back rendered image: {out_png}")
-    img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
-    return img_rgb
+
+def build_affine_spec(shape_in_xyz, forward_matrix):
+    """
+    Build affine-transform spec for scipy.ndimage.affine_transform.
+
+    forward_matrix maps:
+        centered_input_coord -> centered_output_coord
+    """
+    shape_in = np.array(shape_in_xyz, dtype=np.float32)
+    center_in = (shape_in - 1.0) / 2.0
+
+    nx, ny, nz = shape_in_xyz
+    corners = np.array([
+        [0,      0,      0],
+        [0,      0,      nz - 1],
+        [0,      ny - 1, 0],
+        [0,      ny - 1, nz - 1],
+        [nx - 1, 0,      0],
+        [nx - 1, 0,      nz - 1],
+        [nx - 1, ny - 1, 0],
+        [nx - 1, ny - 1, nz - 1],
+    ], dtype=np.float32)
+
+    corners_centered = corners - center_in[None, :]
+    corners_out = (forward_matrix @ corners_centered.T).T
+
+    half_extent = np.max(np.abs(corners_out), axis=0)
+    shape_out = np.ceil(2.0 * half_extent + 1.0).astype(np.int32)
+    shape_out = np.maximum(shape_out, 1)
+
+    center_out = (shape_out.astype(np.float32) - 1.0) / 2.0
+
+    matrix_inv = np.linalg.inv(forward_matrix).astype(np.float32)
+    offset = center_in - matrix_inv @ center_out
+
+    return {
+        "matrix": matrix_inv,
+        "offset": offset.astype(np.float32),
+        "output_shape": tuple(shape_out.tolist())
+    }
+
+
+def apply_affine_spec(vol_xyz: np.ndarray, spec):
+    vol_out = affine_transform(
+        input=vol_xyz,
+        matrix=spec["matrix"],
+        offset=spec["offset"],
+        output_shape=spec["output_shape"],
+        order=1,
+        mode="constant",
+        cval=0.0,
+        prefilter=False
+    )
+    vol_out = np.clip(vol_out.astype(np.float32), 0.0, None)
+    return vol_out
+
+
+def project_camera_volume_to_hw(vol_cam_xyz: np.ndarray, flip_ud: bool = True, flip_lr: bool = False):
+    """
+    Camera coordinates are assumed to be:
+        X -> right
+        Y -> up
+        Z -> forward(depth)
+
+    Projection:
+        integrate along Z, then map to image H/W.
+    """
+    amp_xy = np.sum(vol_cam_xyz, axis=2).astype(np.float32)   # (X, Y)
+    amp_hw = np.transpose(amp_xy, (1, 0)).astype(np.float32)  # (Y, X)
+
+    if flip_ud:
+        amp_hw = np.flipud(amp_hw)
+    if flip_lr:
+        amp_hw = np.fliplr(amp_hw)
+
+    return amp_hw
 
 
 # -----------------------------------------------------------------------------
-# Voxel -> rendered RGB bins -> RGB_bins / M_bins
+# Volume preparation
 # -----------------------------------------------------------------------------
-def build_rendered_bins_from_voxel_rgb(args, dir_bin):
-    occ = np.load(args.npz_path)["occ"].astype(np.float32)  # (Z, Y, X)
-    print("[INFO] occ shape (Z, Y, X) =", occ.shape)
+def load_and_prepare_volume(args):
+    data = np.load(args.npz_path)
+    if "occ" not in data:
+        raise KeyError(f"NPZ file must contain key 'occ'. Found keys: {list(data.keys())}")
 
-    verts_zyx, faces, step = mc_mesh(occ, args)
-    if verts_zyx is None:
-        raise RuntimeError("Full volume marching_cubes failed (empty or too sparse).")
+    occ_zyx = np.asarray(data["occ"], dtype=np.float32)
+    if occ_zyx.ndim != 3:
+        raise ValueError(f"'occ' must be a 3D array, but got shape {occ_zyx.shape}")
 
-    verts_zyx = verts_zyx * float(step)
-    verts_xyz = np.stack([verts_zyx[:, 2], verts_zyx[:, 1], verts_zyx[:, 0]], axis=1).astype(np.float32)
+    occ_zyx = np.clip(occ_zyx, 0.0, 1.0)
 
-    verts_xyz_rot = rotate_points_euler(
-        verts_xyz,
+    if float(np.sum(occ_zyx > 0.0)) < args.min_voxels_to_render:
+        raise RuntimeError("Voxel volume is too sparse or empty.")
+
+    if args.iso_sigma and args.iso_sigma > 0:
+        occ_zyx = gaussian_filter(occ_zyx, sigma=float(args.iso_sigma))
+        occ_zyx = np.clip(occ_zyx, 0.0, None)
+
+    # Convert from (Z, Y, X) to (X, Y, Z)
+    vol_xyz = np.transpose(occ_zyx, (2, 1, 0)).astype(np.float32)
+    return vol_xyz
+
+
+# -----------------------------------------------------------------------------
+# Voxel volume integral -> binned 2D amplitudes
+# -----------------------------------------------------------------------------
+def build_volume_integral_bins(args, dir_bin):
+    vol_xyz = load_and_prepare_volume(args)
+    print("[INFO] input volume shape (X, Y, Z) =", vol_xyz.shape)
+
+    # Step 1: object rotation (same role as original rotate_points_euler)
+    r_obj = rotation_matrix_object(
         args.rot_yaw_deg,
         args.rot_pitch_deg,
-        args.rot_roll_deg,
-        args.rotate_around_center
+        args.rot_roll_deg
+    )
+    spec_obj = build_affine_spec(vol_xyz.shape, r_obj)
+    vol_obj = apply_affine_spec(vol_xyz, spec_obj)
+    print("[INFO] object-rotated volume shape (X, Y, Z) =", vol_obj.shape)
+
+    # Step 2: binning axis is defined in the rotated object coordinate system
+    axis_id = AXIS2ID[args.bin_axis_rotated.lower()]
+    axis_size = vol_obj.shape[axis_id]
+
+    edges_mm = np.linspace(
+        args.z_min_mm,
+        args.z_max_mm,
+        args.num_differentials + 1,
+        dtype=np.float32
+    )
+    centers_mm = 0.5 * (edges_mm[:-1] + edges_mm[1:])
+    edges_idx_float = np.linspace(
+        0.0,
+        float(axis_size),
+        args.num_differentials + 1
     )
 
-    x = verts_xyz_rot[:, 0]
-    y = verts_xyz_rot[:, 1]
-    z = verts_xyz_rot[:, 2]
-    global_xlim = (float(x.min()), float(x.max()))
-    global_ylim = (float(y.min()), float(y.max()))
-    global_zlim = (float(z.min()), float(z.max()))
+    # Step 3: restore original render view using camera transform
+    r_cam = camera_matrix_from_view(args.view_elev, args.view_azim)
+    spec_cam = build_affine_spec(vol_obj.shape, r_cam)
 
-    full_png = os.path.join(dir_bin, args.fullview_name)
-    _ = render_mesh_to_png_and_rgb(verts_xyz_rot, faces, full_png, global_xlim, global_ylim, global_zlim, args)
+    # Full-view preview
+    vol_cam_full = apply_affine_spec(vol_obj, spec_cam)
+    full_amp_native = project_camera_volume_to_hw(
+        vol_cam_full,
+        flip_ud=args.camera_flip_ud,
+        flip_lr=args.camera_flip_lr
+    )
+    full_amp_canvas = resize_keep_aspect_to_canvas_gray(
+        full_amp_native,
+        args.target_height,
+        args.target_width,
+        pad_value=0.0
+    )
+    save_gray_preview(os.path.join(dir_bin, args.fullview_name), full_amp_canvas)
 
-    axis_id = {"x": 0, "y": 1, "z": 2}.get(args.bin_axis_rotated.lower(), None)
-    if axis_id is None:
-        raise ValueError("bin_axis_rotated must be 'x', 'y', or 'z'.")
-
-    coord = verts_xyz_rot[:, axis_id].copy()
-    cmin, cmax = float(coord.min()), float(coord.max())
-
-    if args.bin_reverse:
-        coord = -coord
-        cmin, cmax = float(coord.min()), float(coord.max())
-
-    edges_mm = np.linspace(args.z_min_mm, args.z_max_mm, args.num_bins + 1, dtype=np.float32)
-    centers_mm = 0.5 * (edges_mm[:-1] + edges_mm[1:])
-    edges_coord = np.linspace(cmin, cmax, args.num_bins + 1, dtype=np.float32)
-
-    rgb_bins = []
-    mask_bins = []
-    counts = np.zeros((args.num_bins,), dtype=np.int64)
+    global_max = max(float(full_amp_native.max()), 1e-8)
 
     with open(os.path.join(dir_bin, "meta.txt"), "w", encoding="utf-8") as f:
         f.write(f"NPZ={args.npz_path}\n")
-        f.write(f"occ_shape={occ.shape}\n")
+        f.write(f"INPUT_VOLUME_XYZ_SHAPE={vol_xyz.shape}\n")
+        f.write(f"OBJECT_ROTATED_VOLUME_XYZ_SHAPE={vol_obj.shape}\n")
         f.write(f"ROT(yaw,pitch,roll)=({args.rot_yaw_deg},{args.rot_pitch_deg},{args.rot_roll_deg})\n")
         f.write(f"BIN_AXIS_ROTATED={args.bin_axis_rotated}, BIN_REVERSE={args.bin_reverse}\n")
+        f.write(f"VIEW_ELEV={args.view_elev}, VIEW_AZIM={args.view_azim}\n")
+        f.write(f"CAMERA_FLIP_UD={args.camera_flip_ud}, CAMERA_FLIP_LR={args.camera_flip_lr}\n")
+        f.write(f"D_PERCENTAGE_REQUESTED={args.d_percentage:.8f}\n")
+        f.write(f"D_PERCENTAGE_EFFECTIVE={args.effective_d_percentage:.8f}\n")
+        f.write(f"NUM_DIFFERENTIALS={args.num_differentials}\n")
         f.write(f"edges_mm={' '.join([f'{e:.6f}' for e in edges_mm])}\n")
         f.write(f"centers_mm={' '.join([f'{c:.6f}' for c in centers_mm])}\n")
+        f.write(f"edges_idx_float={' '.join([f'{e:.6f}' for e in edges_idx_float])}\n")
 
-    f0 = faces[:, 0]
-    f1 = faces[:, 1]
-    f2 = faces[:, 2]
+    rgb_bins = []
+    mask_bins = []
+    counts = np.zeros((args.num_differentials,), dtype=np.int64)
 
-    for k in range(args.num_bins):
-        c0 = float(edges_coord[k])
-        c1 = float(edges_coord[k + 1])
-        in_bin_v = (coord >= c0) & (coord < c1)
+    for k in range(args.num_differentials):
+        # Reverse only affects which side maps to low/high physical depth,
+        # while geometry orientation itself remains unchanged.
+        seg = (args.num_differentials - 1 - k) if args.bin_reverse else k
 
-        in_face = in_bin_v[f0] & in_bin_v[f1] & in_bin_v[f2]
-        faces_k = faces[in_face]
+        i0 = int(np.floor(edges_idx_float[seg]))
+        i1 = int(np.floor(edges_idx_float[seg + 1]))
+        if seg == args.num_differentials - 1:
+            i1 = axis_size
+
+        i0 = max(0, min(i0, axis_size))
+        i1 = max(0, min(i1, axis_size))
+
+        slab_full = np.zeros_like(vol_obj, dtype=np.float32)
+
+        if i1 > i0:
+            slicer = [slice(None), slice(None), slice(None)]
+            slicer[axis_id] = slice(i0, i1)
+            slab_full[tuple(slicer)] = vol_obj[tuple(slicer)]
+
+        # Project this slab with the SAME camera transform as the full object
+        slab_cam = apply_affine_spec(slab_full, spec_cam)
+        amp_native = project_camera_volume_to_hw(
+            slab_cam,
+            flip_ud=args.camera_flip_ud,
+            flip_lr=args.camera_flip_lr
+        )
+
+        amp_norm_native = np.clip(amp_native / global_max, 0.0, 1.0)
+        amp_canvas = resize_keep_aspect_to_canvas_gray(
+            amp_norm_native,
+            args.target_height,
+            args.target_width,
+            pad_value=0.0
+        )
+        amp_canvas = np.clip(amp_canvas, 0.0, 1.0).astype(np.float32)
+
+        rgb = np.repeat(amp_canvas[..., None], 3, axis=-1)
+        mask = (amp_canvas > args.mask_thresh).astype(np.uint8) * 255
+
+        rgb_bins.append(rgb)
+        mask_bins.append(mask)
+        counts[k] = int(np.sum(mask > 0))
 
         out_dir = os.path.join(dir_bin, f"plane_{k:02d}_z{centers_mm[k]:.3f}mm")
         os.makedirs(out_dir, exist_ok=True)
 
-        if len(faces_k) == 0:
-            rgb = np.zeros((args.target_height, args.target_width, 3), np.float32)
-        else:
-            out_png = os.path.join(out_dir, "render.png")
-            rgb = render_mesh_to_png_and_rgb(
-                verts_xyz_rot,
-                faces_k,
-                out_png,
-                global_xlim,
-                global_ylim,
-                global_zlim,
-                args
-            )
+        rgb_u8 = (amp_canvas * 255.0).clip(0, 255).astype(np.uint8)
+        rgb_u8_3 = np.repeat(rgb_u8[..., None], 3, axis=-1)
 
-        lum = 0.2989 * rgb[..., 0] + 0.5870 * rgb[..., 1] + 0.1140 * rgb[..., 2]
-        mask = (lum > args.mask_thresh).astype(np.uint8) * 255
-
-        rgb_bins.append(rgb.astype(np.float32))
-        mask_bins.append(mask)
-        counts[k] = int(np.sum(mask > 0))
-
-        rgb_u8 = (np.clip(rgb, 0, 1) * 255.0).astype(np.uint8)
-        cv2.imwrite(os.path.join(out_dir, "rgb.png"), cv2.cvtColor(rgb_u8, cv2.COLOR_RGB2BGR))
+        cv2.imwrite(os.path.join(out_dir, "rgb.png"), cv2.cvtColor(rgb_u8_3, cv2.COLOR_RGB2BGR))
         cv2.imwrite(os.path.join(out_dir, "mask.png"), mask)
+
         with open(os.path.join(out_dir, "depth_mm.txt"), "w", encoding="utf-8") as f:
             f.write(f"{centers_mm[k]:.6f}\n")
 
@@ -673,11 +776,8 @@ def build_rendered_bins_from_voxel_rgb(args, dir_bin):
 # -----------------------------------------------------------------------------
 def generate_hologram_complex_rgb(rgb_bins, mask_bins, centers_mm, args):
     """
-    Output:
-        holo_r, holo_g, holo_b
-
-    Keep the original behavior exactly:
-        each bin shares one random phase map phi(H, W) across RGB channels.
+    Each bin is a slab-integrated amplitude layer.
+    Shared random phase is still used for each bin across RGB channels.
     """
     rng = np.random.default_rng(args.rng_seed)
     height, width, _ = rgb_bins[0].shape
@@ -690,14 +790,15 @@ def generate_hologram_complex_rgb(rgb_bins, mask_bins, centers_mm, args):
 
     wavelengths = [args.wavelength_r, args.wavelength_g, args.wavelength_b]
 
-    for k in tqdm(range(args.num_bins), desc="Generate COMPLEX RGB hologram (rendered bins, shared random phase)"):
+    for k in tqdm(
+        range(args.num_differentials),
+        desc="Generate COMPLEX RGB hologram (differential volume layers)"
+    ):
         mk = (mask_bins[k] > 0)
         if not np.any(mk):
             continue
 
         rgb = np.clip(rgb_bins[k], 0.0, 1.0).astype(np.float32)
-
-        amplitude = rgb
 
         phi = rng.uniform(-np.pi, np.pi, size=(height, width)).astype(np.float32)
         phasor = np.exp(1j * phi).astype(np.complex64)
@@ -707,7 +808,7 @@ def generate_hologram_complex_rgb(rgb_bins, mask_bins, centers_mm, args):
 
         for c in range(3):
             u_obj = np.zeros((height, width), dtype=np.complex64)
-            u_obj[mk] = amplitude[..., c][mk].astype(np.complex64) * phasor[mk]
+            u_obj[mk] = rgb[..., c][mk].astype(np.complex64) * phasor[mk]
             u_holo[c] += asm_propagate(u_obj, dist, wavelengths[c], args.pixel_pitch)
 
     return u_holo[0], u_holo[1], u_holo[2]
@@ -718,10 +819,12 @@ def generate_hologram_complex_rgb(rgb_bins, mask_bins, centers_mm, args):
 # -----------------------------------------------------------------------------
 def reconstruct_slices_rgb(holo_r, holo_g, holo_b, centers_mm, args, dir_recon):
     os.makedirs(dir_recon, exist_ok=True)
-
     wavelengths = [args.wavelength_r, args.wavelength_g, args.wavelength_b]
 
-    for k in tqdm(range(args.num_bins), desc="Reconstruct K slices (RGB, complex hologram)"):
+    for k in tqdm(
+        range(args.num_differentials),
+        desc="Reconstruct differential slices (RGB, complex hologram)"
+    ):
         z_m = float(centers_mm[k]) * 1e-3
         dist = float(z_m - args.holo_z_m)
 
@@ -760,12 +863,8 @@ def main():
 
     if args.target_height <= 0 or args.target_width <= 0:
         raise ValueError("--target_height and --target_width must be positive.")
-    if args.dpi <= 0:
-        raise ValueError("--dpi must be positive.")
     if args.z_max_mm <= args.z_min_mm:
         raise ValueError("--z_max_mm must be greater than --z_min_mm.")
-    if args.num_bins <= 0:
-        raise ValueError("--num_bins must be positive.")
     if args.pixel_pitch <= 0:
         raise ValueError("--pixel_pitch must be positive.")
     if args.wavelength_r <= 0 or args.wavelength_g <= 0 or args.wavelength_b <= 0:
@@ -778,7 +877,7 @@ def main():
     begin = time.time()
     dir_bin, dir_holo, dir_recon = ensure_dirs(args)
 
-    edges, centers, rgb_bins, mask_bins, counts = build_rendered_bins_from_voxel_rgb(args, dir_bin)
+    edges, centers, rgb_bins, mask_bins, counts = build_volume_integral_bins(args, dir_bin)
 
     holo_r, holo_g, holo_b = generate_hologram_complex_rgb(rgb_bins, mask_bins, centers, args)
 

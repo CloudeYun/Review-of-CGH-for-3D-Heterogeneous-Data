@@ -1,146 +1,46 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-RGB Reconstruction from Amplitude/Phase Holograms
+Reconstruct RGB Images from Complex Holograms
 
 Author: Hao Yun
 Date: 2026-03-25
 
 Description:
-    This script reconstructs RGB images from complex holograms represented by
-    amplitude and phase `.npy` files. It supports:
+    This script loads the amplitude and phase of RGB complex holograms,
+    propagates them to one or more reconstruction depths, and saves the
+    reconstructed RGB images.
 
-        1. Standard ASM propagation
-        2. ASM with 2x padding + bandlimit, aligned with Mesh_GPU2（mesh_style）
+Propagation modes:
+    1. Standard Angular Spectrum Method (ASM)
+    2. ASM with 2x zero-padding and band limitation
 
-Visualization modes:
-
-    1. percentile
-       clip((x - p_low) / (p_high - p_low)) -> gamma -> u8
-
-    2. minmax
-       global min-max -> gamma -> u8
+Pipeline:
+    1. Load the RGB hologram amplitude and phase arrays
+    2. Construct the complex hologram for each color channel
+    3. Propagate each channel to the requested reconstruction depths
+    4. Convert the reconstructed fields to amplitude or intensity
+    5. Normalize, resize, and save the RGB reconstruction images
 
 Example:
-    Layer:
-        python ./model/Reconstruction_layer.py \
-        --amp_r /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_3bins_50_53mm/Hologram/amp_R.npy \
-        --pha_r /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_3bins_50_53mm/Hologram/pha_R.npy \
-        --amp_g /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_3bins_50_53mm/Hologram/amp_G.npy \
-        --pha_g /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_3bins_50_53mm/Hologram/pha_G.npy \
-        --amp_b /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_3bins_50_53mm/Hologram/amp_B.npy \
-        --pha_b /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_3bins_50_53mm/Hologram/pha_B.npy \
-        --outdir /workspace/yh/project/CGHReview/result/Layer3/RGBD_complexRGB_3bins_50_53mm/ASM_ReconFromHologram_test \
+    python ./model/Reconstruction_layer.py \
+        --amp_r ./result/Layer/Hologram/amp_R.npy \
+        --pha_r ./result/Layer/Hologram/pha_R.npy \
+        --amp_g ./result/Layer/Hologram/amp_G.npy \
+        --pha_g ./result/Layer/Hologram/pha_G.npy \
+        --amp_b ./result/Layer/Hologram/amp_B.npy \
+        --pha_b ./result/Layer/Hologram/pha_B.npy \
+        --outdir ./result/Layer/Reconstruction \
         --mode asm \
         --wavelength 532e-9 \
         --pitch 4e-6 \
-        --zmin 0.050 --zmax 0.053 --step 0.0001 \
-        --gamma 0.65 \
-        --vis_mode percentile \
-        --p_low 1.0 --p_high 99.0 \
-        --out_size 2048
-
-    PCD:
-        python ./model/Reconstruction_layer.py \
-        --amp_r /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_4bins_3e8_50_53mm_2/Hologram/amp_R.npy \
-        --pha_r /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_4bins_3e8_50_53mm_2/Hologram/phase_R.npy \
-        --amp_g /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_4bins_3e8_50_53mm_2/Hologram/amp_G.npy \
-        --pha_g /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_4bins_3e8_50_53mm_2/Hologram/phase_G.npy \
-        --amp_b /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_4bins_3e8_50_53mm_2/Hologram/amp_B.npy \
-        --pha_b /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_4bins_3e8_50_53mm_2/Hologram/phase_B.npy \
-        --outdir /workspace/yh/project/CGHReview/result/PointCloud3/PCD_complexRGB_4bins_3e8_50_53mm_2/ASM_ReconFromHologram_test \
-        --mode asm \
-        --wavelength 532e-9 \
-        --pitch 5e-6 \
-        --zmin 0.050 --zmax 0.053 --step 0.0001 \
-        --gamma 0.65 \
-        --vis_mode percentile \
-        --p_low 1.0 --p_high 99.0 \
-        --out_size 2048
-
-    LF:
-        python ./model/Reconstruction_layer.py \
-        --amp_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_R.npy \
-        --pha_r /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_R.npy \
-        --amp_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_G.npy \
-        --pha_g /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_G.npy \
-        --amp_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_amp_B.npy \
-        --pha_b /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/Hologram/hologram_phase_B.npy \
-        --outdir /workspace/yh/project/CGHReview/result/LightField3/pers_RGB_ComplexHologram_40_800/ASM_ReconFromHologram_test \
-        --mode asm \
-        --wavelength 532e-9 \
-        --pitch 2e-6 \
-        --zmin -0.055 \
-        --zmax -0.045 \
+        --zmin 0.050 \
+        --zmax 0.053 \
         --step 0.0001 \
         --gamma 0.65 \
         --vis_mode percentile \
-        --p_low 1.0 --p_high 99.0 \
-        --out_size 2048
-
-        python ./model/Reconstruction_layer.py \
-        --amp_r /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_R.npy \
-        --pha_r /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_R.npy \
-        --amp_g /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_G.npy \
-        --pha_g /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_G.npy \
-        --amp_b /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_amp_B.npy \
-        --pha_b /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/Hologram/hologram_phase_B.npy \
-        --outdir /workspace/yh/project/CGHReview/result/LightField3/orth_RGB_complexHologram_20_400/ASM_ReconFromHologram_65 \
-        --mode asm \
-        --wavelength 532e-9 \
-        --pitch 2e-6 \
-        --z_list -0.054 \
-        --gamma 0.65 \
-        --vis_mode percentile \
-        --p_low 1.0 --p_high 99.0 \
-        --out_size 2048
-    
-    Mesh:
-        python ./model/Reconstruction_layer.py \
-        --amp_r  /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Red_amp.npy \
-        --pha_r  /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Red_phase.npy \
-        --amp_g  /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Green_amp.npy \
-        --pha_g  /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Green_phase.npy \
-        --amp_b  /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Blue_amp.npy \
-        --pha_b  /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/Holograms/channel_Blue_phase.npy \
-        --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/BunnyDragon_RGB_FromTxtColor_50k_y0/ASM_ReconFromHologram_test \
-        --mode asm_pad \
-        --wavelength 532e-9 \
-        --pitch 8e-6 \
-        --zmin 4.5 --zmax 5.5 --step 0.01 \
-        --gamma 1 --out_size 2048
-
-        python ./model/Reconstruction_layer.py \
-        --amp_r  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Red_amp.npy \
-        --pha_r  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Red_phase.npy \
-        --amp_g  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Green_amp.npy \
-        --pha_g  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Green_phase.npy \
-        --amp_b  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Blue_amp.npy \
-        --pha_b  /workspace/yh/project/CGHReview/result/Mesh3_n/50k/Holograms/channel_Blue_phase.npy \
-        --outdir /workspace/yh/project/CGHReview/result/Mesh3_n/50k/ASM_ReconFromHologram \
-        --mode asm_pad \
-        --wavelength 532e-9 \
-        --vis_mode mesh_style \
-        --pitch 8e-6 \
-        --zmin 0.045 --zmax 0.055 --step 0.0001 \
-        --gamma 1 --out_size 2048
-
-    Voxel:
-        python ./model/Reconstruction_layer.py \
-        --amp_r /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/amp_R.npy \
-        --pha_r /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/pha_R.npy \
-        --amp_g /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/amp_G.npy \
-        --pha_g /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/pha_G.npy \
-        --amp_b /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/amp_B.npy \
-        --pha_b /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/Hologram/pha_B.npy \
-        --outdir /workspace/yh/project/CGHReview/result/Voxel3/Voxel_renderBins_complexRGB_100bins_50_53mm/ASM_ReconFromHologram_test \
-        --mode asm \
-        --wavelength 532e-9 \
-        --pitch 4e-6 \
-        --zmin 0.050 --zmax 0.055 --step 0.0001 \
-        --gamma 0.65 \
-        --vis_mode percentile \
-        --p_low 1.0 --p_high 99.0 \
+        --p_low 1.0 \
+        --p_high 99.0 \
         --out_size 2048
 """
 
@@ -435,7 +335,7 @@ def main():
         print("[INFO] Mode = ASM (standard)")
     else:
         propagate = asm_propagate_pad_bandlimit
-        print("[INFO] Mode = ASM_PAD (2x padding + bandlimit, aligned with Mesh_GPU2)")
+        print("[INFO] Mode = ASM_PAD (2x padding + bandlimit, aligned with Mesh)")
 
     z_list = parse_z_list(args)
     print(f"[INFO] z count = {len(z_list)}")
