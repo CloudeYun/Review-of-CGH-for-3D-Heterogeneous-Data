@@ -23,7 +23,7 @@ Pipeline:
 
 Example:
     python ./model/PointCloud_ComplexHologram.py \
-      --data_path ./dataset/PointCloud/bunnydragon_pointcloud_3e38.ply \
+      --data_path ./dataset/PointCloud/bunnydragon_pointcloud_3e8.ply \
       --out_root ./result/PointCloud/4bins_3e8\
       --target_size 2048 \
       --out_size 2048 \
@@ -43,8 +43,8 @@ Example:
       --depth_flip
 
     python ./model/PointCloud_ComplexHologram.py \
-      --data_path /workspace/yh/project/CGHReview/dataset/PointCloud3/PointCloud_3000000/bunnydragonRGB_pointcloud_color_3e7.ply \
-      --out_root ./result/PointCloud/4bins_3e7\
+      --data_path /workspace/yh/project/CGHReview/dataset/PointCloud3/PointCloud_3000000/bunnydragonRGB_pointcloud_color_3e7.ply\
+      --out_root /workspace/yh/project/CGHReview/result_test/PCD\
       --target_size 2048 \
       --out_size 2048 \
       --pixel_pitch 5e-6 \

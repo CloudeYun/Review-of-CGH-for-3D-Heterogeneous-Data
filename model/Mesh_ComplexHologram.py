@@ -22,13 +22,13 @@ Description:
 Example:
     python ./model/Mesh_ComplexHologram.py \
       --mesh_txt /workspace/yh/project/CGHReview/dataset/Mesh3_n/BunnyDragon_RGB_50k_y0.txt \
-      --outdir   /workspace/yh/project/CGHReview/result/Mesh3_n/50k_4 \
-      --Nx 4096 --Ny 4096 --dx 8e-6 --dy 8e-6 \cz
+      --outdir   /workspace/yh/project/CGHReview/result_test/Mesh \
+      --Nx 4096 --Ny 4096 --dx 8e-6 --dy 8e-6 \
       --lam_r 532e-9 --lam_g 532e-9 --lam_b 532e-9 \
-      --shiftZ 0.05 --objectScaleRatio 2 \
-      --target_depth 0.01 --z_boost 1.0 \
+      --shiftZ 2 --objectScaleRatio 2 \
+      --target_depth 0.2 --z_boost 1.0 \
       --shading continuous --illu 0 0 1 --log_every 200 \
-      --z_min 0.045 --z_max 0.055 --z_step 0.0001 \
+      --z_min 1.8 --z_max 2.2 --z_step 0.01 \
       --save_every 1 \
       --resume 1 \
       --device 0
