@@ -1,4 +1,4 @@
-# Review of CGH for 3D Heterogeneous Data
+# Representation-to-Wavefront Conversion in Real-Scene Computational Holography
 
 <div align="center">
   <img src="./Overview.jpg" width="100%" alt="Overview of the CGH pipelines for different 3D data representations">
