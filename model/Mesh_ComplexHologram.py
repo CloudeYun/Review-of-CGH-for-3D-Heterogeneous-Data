@@ -22,7 +22,7 @@ Description:
 Example:
     python ./model/Mesh_ComplexHologram.py \
       --mesh_txt ./dataset/Mesh/BunnyDragon_2k.txt \
-      --outdir   ./result/Mesh/BunnyDragon_2k \
+      --outdir   ./result/Mesh2/BunnyDragon_2k \
       --Nx 4096 --Ny 4096 --dx 8e-6 --dy 8e-6 \
       --lam_r 532e-9 --lam_g 532e-9 --lam_b 532e-9 \
       --shiftZ 5 --objectScaleRatio 2 \
@@ -31,7 +31,7 @@ Example:
       --z_min 4.5 --z_max 5.5 --z_step 0.01 \
       --save_every 1 \
       --resume 1 \
-      --device 0
+      --device 5
 """
 
 import os

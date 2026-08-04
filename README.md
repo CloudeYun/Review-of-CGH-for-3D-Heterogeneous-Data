@@ -1,4 +1,4 @@
-# Representation-to-Wavefront Conversion in Real-Scene Computational Holography
+# Representation-to-Wavefront Conversion for Computational Holography of Three-Dimensional Scenes
 
 <div align="center">
   <img src="./Overview.jpg" width="100%" alt="Overview of the CGH pipelines for different 3D data representations">
