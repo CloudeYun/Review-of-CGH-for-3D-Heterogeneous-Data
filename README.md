@@ -11,7 +11,7 @@ data representations.
 The project implements comparable hologram-generation pipelines for six types
 of 3D data:
 
-1. Layered RGB-D and Layered Depth Images (LDI)
+1. RGB-D and Layered Depth Images (LDI)
 2. Colored point clouds
 3. Orthographic and perspective light fields
 4. Triangular meshes
@@ -134,14 +134,14 @@ separately. See [README/NeRF.md](./README/NeRF.md) for instructions.
 
 Each representation has a detailed, copy-and-paste tutorial:
 
-| Representation | Data generator | Hologram generator | Guide |
-| --- | --- | --- | --- |
-| Layered RGB-D / LDI | [Obj2Layer.py](./dataset/Obj2Layer.py) | [Layer_ComplexHologram.py](./model/Layer_ComplexHologram.py) | [Layer guide](./README/Layer.md) |
-| Point cloud | [Obj2PCD.py](./dataset/Obj2PCD.py) | [PointCloud_ComplexHologram.py](./model/PointCloud_ComplexHologram.py) | [Point-cloud guide](./README/PointCloud.md) |
-| Light field | [Obj2LF_orth.py](./dataset/Obj2LF_orth.py), [Obj2LF_pers.py](./dataset/Obj2LF_pers.py) | [Orthographic CGH](./model/LightField_Orth_ComplexHologram.py), [Perspective CGH](./model/LightField_Pers_ComplexHologram.py) | [Light-field guide](./README/LightField.md) |
-| Triangle mesh | [Obj2Mesh.py](./dataset/Obj2Mesh.py) | [Mesh_ComplexHologram.py](./model/Mesh_ComplexHologram.py) | [Mesh guide](./README/Mesh.md) |
-| Voxel volume | [Obj2Vox.py](./dataset/Obj2Vox.py) | [Voxel_ComplexHologram.py](./model/Voxel_ComplexHologram.py) | [Voxel guide](./README/Voxel.md) |
-| NeRF | [gen_multiview.py](./dataset/NeRF/gen_multiview.py) | [NeRF_ComplexHologram.py](./model/NeRF_ComplexHologram.py) | [NeRF guide](./README/NeRF.md) |
+| Representation      | Data generator                                                                       | Hologram generator                                                                                                          | Guide                                      |
+| ------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Layered RGB-D / LDI | [Obj2Layer.py](./dataset/Obj2Layer.py)                                                | [Layer_ComplexHologram.py](./model/Layer_ComplexHologram.py)                                                                 | [Layer guide](./README/Layer.md)            |
+| Point cloud         | [Obj2PCD.py](./dataset/Obj2PCD.py)                                                    | [PointCloud_ComplexHologram.py](./model/PointCloud_ComplexHologram.py)                                                       | [Point-cloud guide](./README/PointCloud.md) |
+| Light field         | [Obj2LF_orth.py](./dataset/Obj2LF_orth.py), [Obj2LF_pers.py](./dataset/Obj2LF_pers.py) | [Orthographic CGH](./model/LightField_Orth_ComplexHologram.py), [Perspective CGH](./model/LightField_Pers_ComplexHologram.py) | [Light-field guide](./README/LightField.md) |
+| Triangle mesh       | [Obj2Mesh.py](./dataset/Obj2Mesh.py)                                                  | [Mesh_ComplexHologram.py](./model/Mesh_ComplexHologram.py)                                                                   | [Mesh guide](./README/Mesh.md)              |
+| Voxel volume        | [Obj2Vox.py](./dataset/Obj2Vox.py)                                                    | [Voxel_ComplexHologram.py](./model/Voxel_ComplexHologram.py)                                                                 | [Voxel guide](./README/Voxel.md)            |
+| NeRF                | [gen_multiview.py](./dataset/NeRF/gen_multiview.py)                                   | [NeRF_ComplexHologram.py](./model/NeRF_ComplexHologram.py)                                                                   | [NeRF guide](./README/NeRF.md)              |
 
 For reconstruction from an existing hologram, see the
 [reconstruction guide](./README/Reconstruction.md).
